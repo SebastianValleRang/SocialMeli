@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 
-public class PromotionDTO {
+public class PostDTO {
     @JsonProperty("post_id")
     private  int postId;
     @JsonProperty("user_id")
@@ -19,7 +19,4 @@ public class PromotionDTO {
     private Product product;
     private int category;
     private double price;
-    @JsonProperty("has_promo")
-    private boolean hasPromo;
-    private double discount;
 }
