@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class ClientDTO {
+public class ClientFollowedDTO {
     @JsonProperty("user_id")
     private int userId;
     @JsonProperty("user_name")

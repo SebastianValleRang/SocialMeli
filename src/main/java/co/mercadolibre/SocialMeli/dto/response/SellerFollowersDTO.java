@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class SellerDTO {
+public class SellerFollowersDTO {
     @JsonProperty("user_id")
     private int userId;
     @JsonProperty("user_name")
