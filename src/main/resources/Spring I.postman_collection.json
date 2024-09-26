@@ -1,0 +1,57 @@
+{
+	"info": {
+		"_postman_id": "b3cbc015-7e93-4e56-84f0-67051da0be55",
+		"name": "Spring I",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38409508"
+	},
+	"item": [
+		{
+			"name": "US0010 / publicPromoPost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 2,\n    \"date\": \"2024-08-08\",\n    // \"date\": \"08-08-2024\",\n    \"product\": {\n        \"product_id\": 1,\n        \"product_name\": \"Silla Gamer\",\n        \"type\": \"Gamer\",\n        \"brand\": \"Racer\",\n        \"color\": \"Red & Black\",\n        \"notes\": \"Special Edition\"\n    },\n    \"category\": 100,\n    \"price\": 1500.50,\n    \"has_promo\": true,\n    \"discount\": 0.25\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/products/promo-post",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"promo-post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US0001 / followSeller",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/users/3/follow/1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"3",
+						"follow",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
