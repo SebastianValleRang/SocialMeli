@@ -10,4 +10,5 @@ public class RecentPostDTO {
     private int userId;
     @JsonProperty("recent_posts")
     private List<Post> recentPosts;
+
 }
