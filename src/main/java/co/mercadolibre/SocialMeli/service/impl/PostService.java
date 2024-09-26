@@ -18,5 +18,5 @@ public class PostService implements IPostService {
         return null;
     }
 
-    private 
+    private
 }
