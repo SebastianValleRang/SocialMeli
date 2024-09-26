@@ -11,4 +11,5 @@ public class RecentPostDTO {
     @JsonProperty("recent_posts")
     private List<Post> recentPosts;
 
+
 }
