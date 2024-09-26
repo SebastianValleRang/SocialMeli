@@ -12,6 +12,7 @@ public class UsersRepository implements IUsersRepository {
 
     @Override
     public List<User> finAllUsers() {
-        return usersList;
+        return List.of();
     }
+
 }
