@@ -23,7 +23,7 @@ public class PostService implements IPostService {
     @Override
     public ResponseDTO createPost(PostRequestDTO post) {
         User user = globalMethods.getUserById(post.getUserId());
-        Product product = globalMethods.getProductById(post.getProductDTO().getProductId());
+        Product product = globalMethods.verifyProduct(post.getProductDTO());
         if (user == null) {
             throw new NotFoundException("Usuario no encontrado.");
         }

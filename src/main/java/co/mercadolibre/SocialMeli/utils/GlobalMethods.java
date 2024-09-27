@@ -1,9 +1,11 @@
 package co.mercadolibre.SocialMeli.utils;
 
+import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +23,11 @@ public class GlobalMethods {
     public boolean isNotSeller(User seller){
         return seller.getPosts().isEmpty();
     }
-    public Product getProductById(int productId){
+    public Product verifyProduct(ProductDTO productDTO){
+        ObjectMapper mapper = new ObjectMapper();
+        Product product = mapper.convertValue(productDTO, Product.class);
         return iProductRepository.findAllProducts().stream()
-                .filter(product -> product.getProductId() == productId)
+                .filter(p->p.equals(product))
                 .findFirst().orElse(null);
     }
 
