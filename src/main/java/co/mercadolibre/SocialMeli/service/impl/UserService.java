@@ -28,17 +28,32 @@ public class UserService implements IUserService {
     public ResponseDTO followSeller(int userId, int userIdToFollow) {
         User user = globalMethods.getUserById(userId);
         User seller = globalMethods.getUserById(userIdToFollow);
+
+        //Validacion existencia de ids
         if (user == null){
             throw new NotFoundException("No existe un usuario con el id %d.".formatted(userId));
         }
         if (seller == null){
             throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
         }
+
+        //Validacion vendedor
         if(globalMethods.isNotSeller(seller)){
             throw new BadRequestException("El usuario %d no es un vendedor.".formatted(userIdToFollow));
         }
+
+        //Validacion que usuario no se siga a el mismo
+        if (user.equals(seller)) throw new BadRequestException("El usuario %d no se puede seguir a sí mismo.".formatted(userId));
+
         //Añadir usuario a la lista de seguidores
         List<User> followers = seller.getFollowers();
+
+        //Validacion si usuario ya es seguidor del vendedor
+        Optional<User> validationFollower = followers.stream()
+                        .filter(v -> v.getUserId() == userId).findFirst();
+
+        if (!validationFollower.isEmpty()) throw new BadRequestException("El usuario %d ya es seguidor del vendedor %d.".formatted(userId, userIdToFollow));
+
         followers.add(user);
         seller.setFollowers(followers);
         //Añadir vendedor a la lista de seguidos
