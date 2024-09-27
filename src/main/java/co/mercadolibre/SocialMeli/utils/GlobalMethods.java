@@ -16,7 +16,6 @@ import java.util.List;
 public class GlobalMethods {
     @Autowired
     IUsersRepository iUsersRepository;
-
     @Autowired
     IProductRepository iProductRepository;
 
@@ -29,15 +28,14 @@ public class GlobalMethods {
     }
 
     public boolean verifyProduct(Product product) {
-        ObjectMapper mapper = new ObjectMapper();
         List<Product> productFound = iProductRepository.findAllProducts().stream()
                 .filter(p -> p.equals(product)).toList();
-
         return !(productFound.isEmpty());
     }
 
     public int getNewPostId(User user){
         return user.getPosts().size() + 1;
     }
+
 
 }

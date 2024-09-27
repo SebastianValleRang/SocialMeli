@@ -6,11 +6,16 @@ import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.aot.hint.TypeReference.listOf;
+
 @Repository
 public class UsersRepository implements IUsersRepository {
 
@@ -18,7 +23,7 @@ public class UsersRepository implements IUsersRepository {
     private List<User> usersList = new ArrayList<>();
 
     public UsersRepository(List<User> usersList, ProductRepository productRepository) {
-        this.iProductRepository= productRepository;
+        this.iProductRepository = productRepository;
         fillUsers();
     }
 
@@ -40,10 +45,12 @@ public class UsersRepository implements IUsersRepository {
                 .filter(p->p.getProductId()==1).findFirst().orElse(null);
 
         Product almohadaDeChayanne = iProductRepository.findAllProducts().stream()
-                .filter(p->p.getProductId()==4).findFirst().orElse(null);
+                .filter(p -> p.getProductId() == 4).findFirst().orElse(null);
 
-        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(),sillaGamer,1,223.3));
-        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(),almohadaDeChayanne,2,227.7));
+        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(), sillaGamer, 1, 223.3));
+        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(), almohadaDeChayanne, 2, 227.7));
+
+        System.out.println(userJuanPerez.getPosts());
 
     }
 
@@ -54,7 +61,11 @@ public class UsersRepository implements IUsersRepository {
 
     @Override
     public void createPost(Post post, User user) {
+
         user.getPosts().add(post);
+
     }
+
+
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public class RecentPostDTO {
     @JsonProperty("user_id")
     private int userId;
-    @JsonProperty("recent_posts")
+    @JsonProperty("posts")
     private List<Post> recentPosts;
 
 
