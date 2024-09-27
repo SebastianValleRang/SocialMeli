@@ -110,16 +110,15 @@ public class UserService implements IUserService {
         if (seller == null){
             throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToUnfollow));
         }
-        if(globalMethods.isNotSeller(seller)){
-            throw new NotFoundException("El usuario %d no es un vendedor.".formatted(userIdToUnfollow));
-        }
-        boolean validateFollower = user.getFollowers().stream().anyMatch(u -> u.getUserId() == userId);
+
+        boolean validateFollower = seller.getFollowers().stream().anyMatch(u -> u.getUserId() == userId);
         if (!validateFollower) throw new BadRequestException("El usuario %d no es un seguidor de el vendedor %d".formatted(userId, userIdToUnfollow));
+
         //Eliminar usuario a la lista de seguidores
         List<User> followers = seller.getFollowers();
         followers.remove(user);
         seller.setFollowers(followers);
-        //Añadir vendedor a la lista de seguidos
+        //Eliminar vendedor a la lista de seguidos
         List<User> followed = user.getFollowed();
         followed.remove(seller);
         user.setFollowed(followed);
