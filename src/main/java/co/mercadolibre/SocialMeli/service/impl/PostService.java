@@ -34,12 +34,11 @@ public class PostService implements IPostService {
 
         Post post = mapper.convertValue(postDTO, Post.class);
         User user = globalMethods.getUserById(post.getUserId());
-        boolean productFound = globalMethods.verifyProduct(post.getProduct());
 
         if (user == null) {
             throw new NotFoundException("Usuario no encontrado.");
         }
-        if (!productFound){
+        if ( !(globalMethods.verifyProduct(post.getProduct()) )){
             throw new NotFoundException("Producto no encontrado.");
         }
         try{

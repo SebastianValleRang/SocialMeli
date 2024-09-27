@@ -50,8 +50,6 @@ public class UsersRepository implements IUsersRepository {
         userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(), sillaGamer, 1, 223.3));
         userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(), almohadaDeChayanne, 2, 227.7));
 
-        System.out.println(userJuanPerez.getPosts());
-
     }
 
     @Override
