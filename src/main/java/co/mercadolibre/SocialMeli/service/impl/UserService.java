@@ -2,15 +2,18 @@ package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
+import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.service.IUserService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -48,7 +51,14 @@ public class UserService implements IUserService {
 
     @Override
     public ClientFollowedDTO listFollowedSellers(int userId) {
-        return null;
+        User user =  globalMethods.getUserById(userId);
+        if (user == null){
+            throw new NotFoundException("Usuario con el id %d no se ha encontrado.".formatted(userId));
+        }
+        List<UserDTO> followedSellers = user.getFollowed().stream()
+                .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
+                .toList();
+        return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers);
     }
 
     @Override
