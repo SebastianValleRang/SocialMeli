@@ -27,8 +27,6 @@ public class PostService implements IPostService {
     public ResponseDTO createPost(PostRequestDTO postDTO) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        System.out.println("dto");
-        System.out.println(postDTO);
 
         if(postDTO.getDate() == null || postDTO.getUserId() == 0 || postDTO.getCategory() == 0 || postDTO.getPrice() == 0){
             throw new BadRequestException("Formato de la request erroneo.");
