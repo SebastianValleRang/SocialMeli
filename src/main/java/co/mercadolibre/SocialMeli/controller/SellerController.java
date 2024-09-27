@@ -17,4 +17,9 @@ public class SellerController {
     public ResponseEntity<?> countFollowers(@PathVariable int userId){
         return new ResponseEntity<>(sellerService.countFollowers(userId), HttpStatus.OK);
     }
+
+    @GetMapping("/users/{userId}/followers/list")
+    public ResponseEntity<?> listFollowers(@PathVariable int userId){
+        return new ResponseEntity<>(sellerService.listFollowers(userId), HttpStatus.OK);
+    }
 }
