@@ -2,6 +2,7 @@ package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
+import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.dto.response.UserDTO;
@@ -12,6 +13,7 @@ import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
 import co.mercadolibre.SocialMeli.service.IUserService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,40 @@ public class UserService implements IUserService {
 
     @Autowired
     GlobalMethods globalMethods;
+
+    @Autowired
+    IUsersRepository iUsersRepository;
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<User> userList = iUsersRepository.findAllUsers();
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<UserDTO> userDTOList = userList.stream()
+                .map(u -> mapper.convertValue(u, UserDTO.class)).toList();
+
+        return userDTOList;
+    }
+
+    @Override
+    public SellerFollowersDTO getFollowersByID(int userId) {
+        List<User> userList = iUsersRepository.findAllUsers();
+        ObjectMapper mapper = new ObjectMapper();
+
+        SellerFollowersDTO userDTOList = userList.stream()
+                .filter(u -> u.getUserId() == userId)
+                .map(u -> {
+                    SellerFollowersDTO outDto = new SellerFollowersDTO();
+                    outDto.setUserId(u.getUserId());
+                    outDto.setUserName(u.getUserName());
+                    List<UserDTO> followersList = u.getFollowers().stream().map(f -> mapper.convertValue(f, UserDTO.class)).toList();
+                    outDto.setFollowers(followersList);
+
+                    return outDto;
+                }).findFirst().orElse(null);
+
+        return userDTOList;
+    }
 
     @Override
     public ResponseDTO followSeller(int userId, int userIdToFollow) {
@@ -72,6 +108,8 @@ public class UserService implements IUserService {
         if(globalMethods.isNotSeller(seller)){
             throw new NotFoundException("El usuario %d no es un vendedor.".formatted(userIdToUnfollow));
         }
+        boolean validateFollower = user.getFollowers().stream().anyMatch(u -> u.getUserId() == userId);
+        if (!validateFollower) throw new BadRequestException("El usuario %d no es un seguidor de el vendedor %d".formatted(userId, userIdToUnfollow));
         //Eliminar usuario a la lista de seguidores
         List<User> followers = seller.getFollowers();
         followers.remove(user);
