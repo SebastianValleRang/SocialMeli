@@ -1,12 +1,12 @@
 package co.mercadolibre.SocialMeli.repository.impl;
 
-import co.mercadolibre.SocialMeli.dto.request.PostRequestDTO;
+import ch.qos.logback.core.net.DefaultSocketConnector;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
-import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,8 +50,6 @@ public class UsersRepository implements IUsersRepository {
         userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(), sillaGamer, 1, 223.3));
         userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(), almohadaDeChayanne, 2, 227.7));
 
-        System.out.println(userJuanPerez.getPosts());
-
     }
 
     @Override
@@ -61,11 +59,7 @@ public class UsersRepository implements IUsersRepository {
 
     @Override
     public void createPost(Post post, User user) {
-
         user.getPosts().add(post);
-
     }
-
-
 
 }

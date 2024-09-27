@@ -27,29 +27,27 @@ public class PostService implements IPostService {
     public ResponseDTO createPost(PostRequestDTO postDTO) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        System.out.println("dto");
-        System.out.println(postDTO);
 
-        if(postDTO.getDate() == null || postDTO.getUserId() == 0 || postDTO.getCategory() == 0 || postDTO.getPrice() == 0){
-            throw new BadRequestException("Formato de la request erroneo.");
+        if(postDTO.getDate() == null || postDTO.getUserId() == 0
+                || postDTO.getCategory() == 0 || postDTO.getPrice() == 0){
+            throw new BadRequestException("Formato de la request erroneo");
         }
 
         Post post = mapper.convertValue(postDTO, Post.class);
         User user = globalMethods.getUserById(post.getUserId());
-        boolean productFound = globalMethods.verifyProduct(post.getProduct());
 
         if (user == null) {
-            throw new NotFoundException("Usuario no encontrado.");
+            throw new NotFoundException("Usuario no encontrado");
         }
-        if (!productFound){
-            throw new NotFoundException("Producto no encontrado.");
+        if ( !(globalMethods.verifyProduct(post.getProduct())) ){
+            throw new NotFoundException("Producto no encontrado");
         }
         try{
             post.setPostId(globalMethods.getNewPostId(user));
             usersRepository.createPost(post, user);
             return new ResponseDTO("Post creado correctamente.", HttpStatus.OK);
         }catch (Exception e){
-            throw new BadRequestException("No se pudo crear el post.");
+            throw new BadRequestException("No se pudo crear el post");
         }
     }
 

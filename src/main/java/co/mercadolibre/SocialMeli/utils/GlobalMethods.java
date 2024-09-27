@@ -1,9 +1,12 @@
 package co.mercadolibre.SocialMeli.utils;
 
+import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
+import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
