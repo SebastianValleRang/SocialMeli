@@ -22,10 +22,10 @@ public class PostService implements IPostService {
     UsersRepository usersRepository;
     @Autowired
     GlobalMethods globalMethods;
+    ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public ResponseDTO createPost(PostRequestDTO postDTO) {
-        ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
         if(postDTO.getDate() == null || postDTO.getUserId() == 0 || postDTO.getCategory() == 0 || postDTO.getPrice() == 0){
