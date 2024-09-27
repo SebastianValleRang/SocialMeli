@@ -45,7 +45,7 @@ public class UsersRepository implements IUsersRepository {
                 .filter(p->p.getProductId()==4).findFirst().orElse(null);
 
         userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(),sillaGamer,1,223.3));
-        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(),almohadaDeChayanne,2,227.7));
+        userFedericoV.getPosts().add(new Post(2, userFedericoV.getUserId(), LocalDate.now(),almohadaDeChayanne,2,227.7));
 
     }
 

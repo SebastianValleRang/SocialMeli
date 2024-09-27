@@ -19,8 +19,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/followed/list")
-    public  ResponseEntity<?> listFollowedSellers(@PathVariable int userId){
-        return new ResponseEntity<>(iUserService.listFollowedSellers(userId), HttpStatus.OK);
+    public  ResponseEntity<?> listFollowedSellers(@PathVariable int userId, @RequestParam (required =false) String order ){
+        return new ResponseEntity<>(iUserService.listFollowedSellers(userId,order), HttpStatus.OK);
     }
 
 
