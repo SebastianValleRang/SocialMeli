@@ -38,6 +38,9 @@ public class UserService implements IUserService {
         List<User> userList = iUsersRepository.findAllUsers();
         ObjectMapper mapper = new ObjectMapper();
 
+
+        if (userList.isEmpty()) throw new NotFoundException("No existen datos en la lista de usuarios.");
+
         List<UserDTO> userDTOList = userList.stream()
                 .map(u -> mapper.convertValue(u, UserDTO.class)).toList();
 
@@ -49,7 +52,7 @@ public class UserService implements IUserService {
         List<User> userList = iUsersRepository.findAllUsers();
         ObjectMapper mapper = new ObjectMapper();
 
-        SellerFollowersDTO userDTOList = userList.stream()
+        SellerFollowersDTO sellerDTO = userList.stream()
                 .filter(u -> u.getUserId() == userId)
                 .map(u -> {
                     SellerFollowersDTO outDto = new SellerFollowersDTO();
@@ -61,7 +64,9 @@ public class UserService implements IUserService {
                     return outDto;
                 }).findFirst().orElse(null);
 
-        return userDTOList;
+        if (sellerDTO.equals(null)) throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userId));
+
+        return sellerDTO;
     }
 
     @Override
