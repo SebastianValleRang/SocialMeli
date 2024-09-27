@@ -5,5 +5,5 @@ import co.mercadolibre.SocialMeli.entity.User;
 import java.util.List;
 
 public interface IUsersRepository {
-    List<User> finAllUsers();
+    List<User> findAllUsers();
 }

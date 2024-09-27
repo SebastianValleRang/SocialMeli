@@ -28,11 +28,6 @@ public class UserService implements IUserService {
     @Autowired
     GlobalMethods globalMethods;
 
-    public UserService(UsersRepository usersRepository){
-        this.iUsersRepository = usersRepository;
-    }
-
-
     @Override
     public ResponseDTO followSeller(int userId, int userIdToFollow) {
         User user = globalMethods.getUserById(userId);
@@ -44,7 +39,7 @@ public class UserService implements IUserService {
             throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
         }
         if(globalMethods.isNotSeller(seller)){
-            throw new NotFoundException("El usuario %d no es un vendedor.".formatted(userIdToFollow));
+            throw new BadRequestException("El usuario %d no es un vendedor.".formatted(userIdToFollow));
         }
         //Añadir usuario a la lista de seguidores
         List<User> followers = seller.getFollowers();
@@ -65,7 +60,29 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseDTO unfollow(int userId, int userIdToFollow) { return null;}
+    public ResponseDTO unfollow(int userId, int userIdToUnfollow) {
+        User user = globalMethods.getUserById(userId);
+        User seller = globalMethods.getUserById(userIdToUnfollow);
+        if (user == null){
+            throw new NotFoundException("No existe un usuario con el id %d.".formatted(userId));
+        }
+        if (seller == null){
+            throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToUnfollow));
+        }
+        if(globalMethods.isNotSeller(seller)){
+            throw new NotFoundException("El usuario %d no es un vendedor.".formatted(userIdToUnfollow));
+        }
+        //Eliminar usuario a la lista de seguidores
+        List<User> followers = seller.getFollowers();
+        followers.remove(user);
+        seller.setFollowers(followers);
+        //Añadir vendedor a la lista de seguidos
+        List<User> followed = user.getFollowed();
+        followed.remove(seller);
+        user.setFollowed(followed);
+
+        return new ResponseDTO("El usuario %d ha dejado de seguir al vendedor %d.".formatted(userId,userIdToUnfollow), HttpStatus.OK);
+    }
 
     @Override
     public ClientFollowedDTO listFollowedSellersOrder(int userId, String Order) {

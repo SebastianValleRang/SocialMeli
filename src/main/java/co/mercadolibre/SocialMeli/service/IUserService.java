@@ -9,7 +9,7 @@ public interface IUserService {
 
     ClientFollowedDTO listFollowedSellers(int userId);
 
-    ResponseDTO unfollow(int userId, int userIdToFollow);
+    ResponseDTO unfollow(int userId, int userIdToUnfollow);
 
     ClientFollowedDTO listFollowedSellersOrder(int userId, String Order); //Preguntar si es la misma ClientDTO
 }
