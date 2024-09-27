@@ -4,6 +4,7 @@ import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.User;
+import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
 import co.mercadolibre.SocialMeli.service.IPromoPostService;
@@ -28,6 +29,12 @@ public class PromoPostService implements IPromoPostService {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+
+        if(promoPostRequestDTO.getDate() == null || promoPostRequestDTO.getUserId() == 0
+                || promoPostRequestDTO.getCategory() == 0 || promoPostRequestDTO.getPrice() == 0){
+            throw new BadRequestException("Formato de la request erroneo.");
+        }
+
         Post post = mapper.convertValue(promoPostRequestDTO, Post.class);
 
         User user = usersRepository.findAllUsers().stream()
@@ -38,13 +45,11 @@ public class PromoPostService implements IPromoPostService {
             throw new NotFoundException("El usuario suministrado no existe");
         }
 
-        if(globalMethods.verifyProduct(post.getProduct())){
-            throw  new NotFoundException("Producto no encontrado");
+        if( !(globalMethods.verifyProduct(post.getProduct())) ){
+            throw new NotFoundException("Producto no encontrado");
         }
 
-        post.setPostId(globalMethods.getNewPostId(user));
         usersRepository.createPost(post, user);
-
         return new ResponseDTO("Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(), HttpStatus.OK);
     }
 }
