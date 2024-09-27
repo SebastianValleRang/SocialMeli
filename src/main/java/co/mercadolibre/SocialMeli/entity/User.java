@@ -13,7 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+    @JsonProperty("user_id")
     private int userId;
+    @JsonProperty("user_name")
     private String userName;
     @JsonIgnore
     private List<User> followers; //lista de seguidores

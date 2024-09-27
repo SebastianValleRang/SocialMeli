@@ -13,16 +13,6 @@ public class UserController {
     @Autowired
     IUserService iUserService;
 
-    @GetMapping
-    ResponseEntity<?> getAllUsers(){
-        return new ResponseEntity<>(iUserService.getAllUsers(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getFollowersByID(@PathVariable int userId){
-        return new ResponseEntity<>(iUserService.getFollowersByID(userId), HttpStatus.OK);
-    }
-
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followSeller(@PathVariable int userId, @PathVariable int userIdToFollow){
         return new ResponseEntity<>(iUserService.followSeller(userId,userIdToFollow), HttpStatus.OK);

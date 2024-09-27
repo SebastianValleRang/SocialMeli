@@ -10,10 +10,6 @@ import java.util.List;
 
 public interface IUserService {
 
-    List<UserDTO> getAllUsers();
-
-    SellerFollowersDTO getFollowersByID(int userId);
-
     ResponseDTO followSeller(int userId, int userIdToFollow);
 
     ClientFollowedDTO listFollowedSellers(int userId);
