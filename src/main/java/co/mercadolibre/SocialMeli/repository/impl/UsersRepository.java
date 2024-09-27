@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.aot.hint.TypeReference.listOf;
+
 @Repository
 public class UsersRepository implements IUsersRepository {
 
