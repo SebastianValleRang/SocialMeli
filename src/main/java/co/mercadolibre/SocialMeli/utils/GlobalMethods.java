@@ -3,11 +3,14 @@ package co.mercadolibre.SocialMeli.utils;
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
+import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class GlobalMethods {
@@ -16,19 +19,20 @@ public class GlobalMethods {
     @Autowired
     IProductRepository iProductRepository;
 
-    public User getUserById(int userId){
+    public User getUserById(int userId) {
         return iUsersRepository.findAllUsers().stream().filter(entry -> entry.getUserId() == userId).findFirst().orElse(null);
     }
 
-    public boolean isNotSeller(User seller){
+    public boolean isNotSeller(User seller) {
         return seller.getPosts().isEmpty();
     }
-    public Product verifyProduct(ProductDTO productDTO){
+
+    public boolean verifyProduct(Product product) {
         ObjectMapper mapper = new ObjectMapper();
-        Product product = mapper.convertValue(productDTO, Product.class);
-        return iProductRepository.findAllProducts().stream()
-                .filter(p->p.equals(product))
-                .findFirst().orElse(null);
+
+        List<Product> productFound = iProductRepository.findAllProducts().stream()
+                .filter(p -> p.equals(product)).toList();
+        return !(productFound.isEmpty());
     }
 
 

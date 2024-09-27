@@ -9,6 +9,7 @@ import co.mercadolibre.SocialMeli.exception.NotFoundException;
 import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
 import co.mercadolibre.SocialMeli.service.IPostService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,14 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseDTO createPost(PostRequestDTO post) {
+        ObjectMapper mapper = new ObjectMapper();
+        Product product = mapper.convertValue(post.getProductDTO(),Product.class);
         User user = globalMethods.getUserById(post.getUserId());
-        Product product = globalMethods.verifyProduct(post.getProductDTO());
+        boolean productFound = globalMethods.verifyProduct(product);
         if (user == null) {
             throw new NotFoundException("Usuario no encontrado.");
         }
-        if (product == null){
+        if (!productFound){
             throw new NotFoundException("Producto no encontrado.");
         }
         try{
