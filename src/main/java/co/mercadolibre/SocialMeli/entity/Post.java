@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Post {
     private  int postId;
-    @JsonProperty("user_id")
     private int userId;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;

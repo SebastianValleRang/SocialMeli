@@ -16,11 +16,11 @@ public class GlobalMethods {
     @Autowired
     IProductRepository iProductRepository;
 
-    public User getUserById(int userId) {
+    public User getUserById(int userId){
         return iUsersRepository.findAllUsers().stream().filter(entry -> entry.getUserId() == userId).findFirst().orElse(null);
     }
 
-    public boolean isNotSeller(User seller) {
+    public boolean isNotSeller(User seller){
         return seller.getPosts().isEmpty();
     }
 

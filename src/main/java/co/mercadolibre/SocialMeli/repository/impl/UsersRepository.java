@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.aot.hint.TypeReference.listOf;
+
 @Repository
 public class UsersRepository implements IUsersRepository {
 
@@ -25,13 +27,13 @@ public class UsersRepository implements IUsersRepository {
         fillUsers();
     }
 
-    public void fillUsers() {
+    public void fillUsers(){
 
-        User userJuanPerez = new User(1, "JuanPerez");
-        User userLeandroDiaz = new User(2, "LeandroDiaz");
-        User userAngelaGonzales = new User(3, "AngelaGonzales");
-        User userAnita99 = new User(4, "Anita99");
-        User userFedericoV = new User(5, "FedericoV");
+        User userJuanPerez = new User(1,"JuanPerez");
+        User userLeandroDiaz = new User(2,"LeandroDiaz");
+        User userAngelaGonzales = new User(3,"AngelaGonzales");
+        User userAnita99 = new User(4,"Anita99");
+        User userFedericoV = new User(5,"FedericoV");
 
         usersList.add(userJuanPerez);
         usersList.add(userLeandroDiaz);
@@ -40,7 +42,7 @@ public class UsersRepository implements IUsersRepository {
         usersList.add(userFedericoV);
 
         Product sillaGamer = iProductRepository.findAllProducts().stream()
-                .filter(p -> p.getProductId() == 1).findFirst().orElse(null);
+                .filter(p->p.getProductId()==1).findFirst().orElse(null);
 
         Product almohadaDeChayanne = iProductRepository.findAllProducts().stream()
                 .filter(p -> p.getProductId() == 4).findFirst().orElse(null);
@@ -63,6 +65,7 @@ public class UsersRepository implements IUsersRepository {
         user.getPosts().add(post);
 
     }
+
 
 
 }
