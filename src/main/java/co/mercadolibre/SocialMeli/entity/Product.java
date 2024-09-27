@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
+    @JsonProperty("product_id")
     private int productId;
+    @JsonProperty("product_name")
     private String productName;
     private String type;
     private String brand;

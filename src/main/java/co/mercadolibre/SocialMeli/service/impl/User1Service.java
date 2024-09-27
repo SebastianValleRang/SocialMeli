@@ -6,11 +6,11 @@ import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
 import co.mercadolibre.SocialMeli.service.IUserService;
 
-public class UserService implements IUserService {
+public class User1Service implements IUserService {
 
     IUsersRepository iUsersRepository;
 
-    public UserService(UsersRepository usersRepository){
+    public User1Service(UsersRepository usersRepository){
         this.iUsersRepository = usersRepository;
     }
 
