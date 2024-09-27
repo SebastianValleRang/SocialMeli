@@ -17,7 +17,6 @@ public class PromoController {
 
     @PostMapping("/products/promo-post")
     public ResponseEntity<?> publicPromoPost(@RequestBody PromoPostRequestDTO promoPostRequestDTO){
-
         return new ResponseEntity<>(iPromoPostService.publicPromoPost(promoPostRequestDTO), HttpStatus.OK);
     }
 }

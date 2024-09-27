@@ -1,6 +1,6 @@
 package co.mercadolibre.SocialMeli.utils;
 
-import co.mercadolibre.SocialMeli.dto.response.ProductDTO;
+import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;

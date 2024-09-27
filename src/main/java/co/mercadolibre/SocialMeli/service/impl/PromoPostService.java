@@ -1,7 +1,6 @@
 package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
-import co.mercadolibre.SocialMeli.dto.response.ProductDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.User;
