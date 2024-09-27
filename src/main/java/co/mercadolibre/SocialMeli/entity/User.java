@@ -13,8 +13,11 @@ import java.util.List;
 public class User {
     private int userId;
     private String userName;
+    @JsonIgnore
     private List<User> followers; //lista de seguidores
+    @JsonIgnore
     private List<User> followed; // listas de seguidos
+    @JsonIgnore
     private List<Post> posts;
 
     public User(int userId, String userName) {
