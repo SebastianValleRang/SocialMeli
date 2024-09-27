@@ -1,13 +1,10 @@
 package co.mercadolibre.SocialMeli.repository.impl;
 
-import ch.qos.logback.core.net.DefaultSocketConnector;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -41,21 +38,20 @@ public class UsersRepository implements IUsersRepository {
         usersList.add(userAnita99);
         usersList.add(userFedericoV);
 
-        Product sillaGamer = iProductRepository.finAllProducts().stream()
+        Product sillaGamer = iProductRepository.findAllProducts().stream()
                 .filter(p->p.getProductId()==1).findFirst().orElse(null);
 
-        Product almohadaDeChayanne = iProductRepository.finAllProducts().stream()
+        Product almohadaDeChayanne = iProductRepository.findAllProducts().stream()
                 .filter(p->p.getProductId()==4).findFirst().orElse(null);
 
         userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(),sillaGamer,1,223.3));
         userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(),almohadaDeChayanne,2,227.7));
 
-        System.out.println(userJuanPerez.getPosts());
-
     }
 
     @Override
-    public List<User> finAllUsers() {
+    public List<User> findAllUsers() {
         return usersList;
     }
+
 }
