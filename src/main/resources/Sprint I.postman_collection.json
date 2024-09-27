@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b3cbc015-7e93-4e56-84f0-67051da0be55",
-		"name": "Spring I",
+		"_postman_id": "996c293b-5a7c-472b-8538-ebef8dcf4419",
+		"name": "Sprint I",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409508"
+		"_exporter_id": "38406962"
 	},
 	"item": [
 		{
@@ -48,6 +48,28 @@
 						"3",
 						"follow",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US0002 / countFollowers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1/followers/count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"followers",
+						"count"
 					]
 				}
 			},
