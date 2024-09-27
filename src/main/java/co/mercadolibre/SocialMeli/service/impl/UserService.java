@@ -11,19 +11,17 @@ import co.mercadolibre.SocialMeli.utils.GlobalMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpStatus;
 
-import java.util.List;
-import java.util.Optional;
 
+import java.util.Comparator;
 import java.util.List;
+
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
     GlobalMethods globalMethods;
-
 
 
     @Override
@@ -68,7 +66,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ClientFollowedDTO listFollowedSellers(int userId) {
+    public ClientFollowedDTO listFollowedSellers(int userId, String order) {
         User user =  globalMethods.getUserById(userId);
         if (user == null){
             throw new NotFoundException("Usuario con el id %d no se ha encontrado.".formatted(userId));
@@ -76,6 +74,15 @@ public class UserService implements IUserService {
         List<UserDTO> followedSellers = user.getFollowed().stream()
                 .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
                 .toList();
+
+        if (order != null && order.equals("name_asc")){
+            return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers.stream().sorted(Comparator.comparing(UserDTO::getUserName)).toList());
+        } else if (order != null && order.equals("name_desc")){
+            return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers.stream().sorted(Comparator.comparing(UserDTO::getUserName).reversed()).toList());
+        } else if(order != null){
+            throw new BadRequestException("Ordenamiento invalido");
+        }
+
         return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers);
     }
 
@@ -105,8 +112,4 @@ public class UserService implements IUserService {
         return new ResponseDTO("El usuario %d ha dejado de seguir al vendedor %d.".formatted(userId,userIdToUnfollow), HttpStatus.OK);
     }
 
-    @Override
-    public ClientFollowedDTO listFollowedSellersOrder(int userId, String Order) {
-        return null;
-    }
 }
