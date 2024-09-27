@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -17,7 +18,7 @@ public class PostRequestDTO {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     @JsonProperty("product")
-    private ProductDTO productDTO;
+    private ProductDTO product;
     private int category;
     private double price;
 }

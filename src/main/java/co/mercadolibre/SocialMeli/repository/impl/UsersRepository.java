@@ -6,6 +6,8 @@ import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
+import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -17,7 +19,6 @@ public class UsersRepository implements IUsersRepository {
 
     private IProductRepository iProductRepository;
     private List<User> usersList = new ArrayList<>();
-    private int countIdPost = 1;
 
     public UsersRepository(List<User> usersList, ProductRepository productRepository) {
         this.iProductRepository = productRepository;
@@ -44,8 +45,8 @@ public class UsersRepository implements IUsersRepository {
         Product almohadaDeChayanne = iProductRepository.findAllProducts().stream()
                 .filter(p -> p.getProductId() == 4).findFirst().orElse(null);
 
-        userJuanPerez.getPosts().add(new Post(countIdPost++, userJuanPerez.getUserId(), LocalDate.now(), sillaGamer, 1, 223.3));
-        userJuanPerez.getPosts().add(new Post(countIdPost++, userJuanPerez.getUserId(), LocalDate.now(), almohadaDeChayanne, 2, 227.7));
+        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.now(), sillaGamer, 1, 223.3));
+        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(), almohadaDeChayanne, 2, 227.7));
 
         System.out.println(userJuanPerez.getPosts());
 
@@ -57,12 +58,9 @@ public class UsersRepository implements IUsersRepository {
     }
 
     @Override
-    public void createPost(PostRequestDTO post, Product product) {
-     for(User user : usersList){
-         if(user.getUserId() == post.getUserId()){
-             user.getPosts().add(new Post(countIdPost++, user.getUserId(),post.getDate(),product,post.getCategory(),post.getPrice()));
-         }
-     }
+    public void createPost(Post post, User user) {
+
+        user.getPosts().add(post);
 
     }
 
