@@ -24,10 +24,10 @@ public class SellerService implements ISellerService {
     public CountFollowersDTO countFollowers(int userId) {
         User sellerToCheck = globalMethods.getUserById(userId);
         if (sellerToCheck == null){
-            throw new NotFoundException("User not found");
+            throw new NotFoundException("El usuario con el id %d no se ha encontrado".formatted(userId));
         }
         if (globalMethods.isNotSeller(sellerToCheck)){
-            throw new NotFoundException("The user is not seller");
+            throw new NotFoundException("El usuario con el id %d no es un vendedor".formatted(userId));
         }
         return new CountFollowersDTO(sellerToCheck.getUserId(), sellerToCheck.getUserName(), sellerToCheck.getFollowers().size());
     }
@@ -36,10 +36,10 @@ public class SellerService implements ISellerService {
     public SellerFollowersDTO listFollowers(int userId) {
         User sellerToCheck = globalMethods.getUserById(userId);
         if (sellerToCheck == null){
-            throw new NotFoundException("User not found");
+            throw new NotFoundException("El usuario con el id %d no se ha encontrado".formatted(userId));
         }
         if (globalMethods.isNotSeller(sellerToCheck)){
-            throw new NotFoundException("The user is not seller");
+            throw new NotFoundException("El usuario con el id %d no es un vendedor".formatted(userId));
         }
         List<UserDTO> listOfFollowers = sellerToCheck.getFollowers().stream()
                 .map(follower -> new UserDTO(follower.getUserId(), follower.getUserName())).toList();
