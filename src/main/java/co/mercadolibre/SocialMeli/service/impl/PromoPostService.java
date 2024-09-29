@@ -1,6 +1,7 @@
 package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
+import co.mercadolibre.SocialMeli.dto.response.CountPromoPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.User;
@@ -50,11 +51,13 @@ public class PromoPostService implements IPromoPostService {
         }
 
         usersRepository.createPost(post, user);
-        return new ResponseDTO("Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(), HttpStatus.OK);
+        return new ResponseDTO(
+                "Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(),
+                HttpStatus.OK);
     }
 
     @Override
-    public ResponseDTO countPromoPostUser(String userId) {
+    public CountPromoPostDTO countPromoPostUser(String userId) {
         int userIdInt;
 
         try {
@@ -69,9 +72,11 @@ public class PromoPostService implements IPromoPostService {
             throw new NotFoundException("Usuario no encontrado");
         }
 
-        return new ResponseDTO(
-                "El usuario tiene "+user.getPosts().stream().filter(Post::isHasPromo).count()+" post de promociones"
-                ,HttpStatus.OK);
+        return new CountPromoPostDTO(
+                user.getUserId(),
+                user.getUserName(),
+                user.getPosts().stream().filter(Post::isHasPromo).count()
+        );
 
     }
 }
