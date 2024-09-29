@@ -5,4 +5,5 @@ import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 
 public interface IPromoPostService {
     ResponseDTO publicPromoPost(PromoPostRequestDTO promoPostRequestDTO);
+    ResponseDTO countPromoPostUser(String userId);
 }
