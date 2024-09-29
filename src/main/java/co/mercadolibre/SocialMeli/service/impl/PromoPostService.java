@@ -25,7 +25,7 @@ public class PromoPostService implements IPromoPostService {
     GlobalMethods globalMethods;
 
     @Override
-    public ResponseDTO publicPromoPost(PromoPostRequestDTO promoPostRequestDTO) {
+    public ResponseDTO postPromotion(PromoPostRequestDTO promoPostRequestDTO) {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
