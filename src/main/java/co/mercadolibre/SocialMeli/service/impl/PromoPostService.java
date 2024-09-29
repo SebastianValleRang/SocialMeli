@@ -52,4 +52,26 @@ public class PromoPostService implements IPromoPostService {
         usersRepository.createPost(post, user);
         return new ResponseDTO("Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseDTO countPromoPostUser(String userId) {
+        int userIdInt;
+
+        try {
+            userIdInt = Integer.parseInt(userId);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Parametros incorrectos");
+        }
+
+        User user = usersRepository.findAllUsers().stream().filter(p -> p.getUserId() == userIdInt).findFirst().orElse(null);
+
+        if (user == null){
+            throw new NotFoundException("Usuario no encontrado");
+        }
+
+        return new ResponseDTO(
+                "El usuario tiene "+user.getPosts().stream().filter(Post::isHasPromo).count()+" post de promociones"
+                ,HttpStatus.OK);
+
+    }
 }
