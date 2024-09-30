@@ -20,7 +20,8 @@ public class PostController {
     }
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> getPostByUserLastTwoWeeks(@PathVariable int userId){
-        return new ResponseEntity<>(postService.getPostsByFollowedUsersLastTwoWeeks(userId), HttpStatus.OK);
+    public ResponseEntity<?> getPostByUserLastTwoWeeks(@PathVariable int userId, @RequestParam(required = false) String order){
+        return new ResponseEntity<>(postService.getPostsByFollowedUsersLastTwoWeeks(userId,order), HttpStatus.OK);
     }
+
 }

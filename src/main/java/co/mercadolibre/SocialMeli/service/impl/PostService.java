@@ -61,16 +61,29 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId) {
+    public RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId, String order) {
         if (globalMethods.getUserById(userId) == null) {
             throw new NotFoundException("Usuario no encontrado");
         }
-        LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
         List<PostResponseDTO> postList = new ArrayList<>();
         List<User> userFollowedList = globalMethods.getUserById(userId).getFollowed();
         if (userFollowedList.isEmpty()) {
             throw new BadRequestException("El usuario no sigue a nadie.");
         }
+        getPostsFromFollowedLastTwoWeeks(userFollowedList,postList);
+        if (order != null) {
+            if (order.equalsIgnoreCase("date_asc")) {
+                postList.sort(Comparator.comparing(PostResponseDTO::getDate));
+            } else if (order.equalsIgnoreCase("date_desc")) {
+            } else {
+                throw new BadRequestException("Orden no válido.");
+            }
+        }
+        return new RecentPostDTO(userId, postList);
+    }
+
+    private void getPostsFromFollowedLastTwoWeeks(List<User> userFollowedList, List<PostResponseDTO> postList){
+        LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
         for (User userFollowed : userFollowedList) {
             postList.addAll(userFollowed.getPosts().stream()
                     .filter(p -> p.getDate().isAfter(lastTwoWeeks))
@@ -78,6 +91,6 @@ public class PostService implements IPostService {
                     .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
                     .toList());
         }
-        return new RecentPostDTO(userId, postList);
+
     }
 }

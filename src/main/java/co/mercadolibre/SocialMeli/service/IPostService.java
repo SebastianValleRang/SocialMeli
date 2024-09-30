@@ -6,5 +6,5 @@ import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 
 public interface IPostService {
     ResponseDTO createPost(PostRequestDTO post);
-    RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId);
+    RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId, String order);
 }
