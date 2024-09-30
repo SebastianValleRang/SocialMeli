@@ -5,10 +5,7 @@ import co.mercadolibre.SocialMeli.service.impl.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
@@ -20,5 +17,10 @@ public class PostController {
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody PostRequestDTO post){
         return new ResponseEntity<>(postService.createPost(post), HttpStatus.OK);
+    }
+
+    @GetMapping("/followed/{userId}/list")
+    public ResponseEntity<?> getPostByUserLastTwoWeeks(@PathVariable int userId){
+        return new ResponseEntity<>(postService.getPostsByFollowedUsersLastTwoWeeks(userId), HttpStatus.OK);
     }
 }

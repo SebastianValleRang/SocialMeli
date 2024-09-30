@@ -1,6 +1,8 @@
 package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.request.PostRequestDTO;
+import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
+import co.mercadolibre.SocialMeli.dto.response.RecentPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
@@ -16,20 +18,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 public class PostService implements IPostService {
     @Autowired
     UsersRepository usersRepository;
     @Autowired
     GlobalMethods globalMethods;
-    ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper mapper;
+
 
     @Override
     public ResponseDTO createPost(PostRequestDTO postDTO) {
         mapper.registerModule(new JavaTimeModule());
 
-        if(postDTO.getDate() == null || postDTO.getUserId() == 0
-                || postDTO.getCategory() == 0 || postDTO.getPrice() == 0){
+        if (postDTO.getDate() == null || postDTO.getUserId() == 0
+                || postDTO.getCategory() == 0 || postDTO.getPrice() == 0) {
             throw new BadRequestException("Formato de la request erroneo");
         }
 
@@ -39,17 +48,36 @@ public class PostService implements IPostService {
         if (user == null) {
             throw new NotFoundException("Usuario no encontrado");
         }
-        if ( !(globalMethods.verifyProduct(post.getProduct())) ){
+        if (!(globalMethods.verifyProduct(post.getProduct()))) {
             throw new NotFoundException("Producto no encontrado");
         }
-        try{
+        try {
             post.setPostId(globalMethods.getNewPostId(user));
             usersRepository.createPost(post, user);
             return new ResponseDTO("Post creado correctamente.", HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new BadRequestException("No se pudo crear el post");
         }
     }
 
-
+    @Override
+    public RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId) {
+        if (globalMethods.getUserById(userId) == null) {
+            throw new NotFoundException("Usuario no encontrado");
+        }
+        LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
+        List<PostResponseDTO> postList = new ArrayList<>();
+        List<User> userFollowedList = globalMethods.getUserById(userId).getFollowed();
+        if (userFollowedList.isEmpty()) {
+            throw new BadRequestException("El usuario no sigue a nadie.");
+        }
+        for (User userFollowed : userFollowedList) {
+            postList.addAll(userFollowed.getPosts().stream()
+                    .filter(p -> p.getDate().isAfter(lastTwoWeeks))
+                    .map(post -> mapper.convertValue(post, PostResponseDTO.class))
+                    .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
+                    .toList());
+        }
+        return new RecentPostDTO(userId, postList);
+    }
 }
