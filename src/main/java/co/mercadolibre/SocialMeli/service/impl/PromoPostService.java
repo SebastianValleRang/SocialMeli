@@ -1,6 +1,7 @@
 package co.mercadolibre.SocialMeli.service.impl;
 
 import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
+import co.mercadolibre.SocialMeli.dto.response.CountPromoPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.User;
@@ -25,7 +26,7 @@ public class PromoPostService implements IPromoPostService {
     GlobalMethods globalMethods;
 
     @Override
-    public ResponseDTO publicPromoPost(PromoPostRequestDTO promoPostRequestDTO) {
+    public ResponseDTO postPromotion(PromoPostRequestDTO promoPostRequestDTO) {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -50,6 +51,32 @@ public class PromoPostService implements IPromoPostService {
         }
 
         usersRepository.createPost(post, user);
-        return new ResponseDTO("Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(), HttpStatus.OK);
+        return new ResponseDTO(
+                "Promocion creada: "+promoPostRequestDTO.getProduct().getProductName()+" por "+user.getUserName(),
+                HttpStatus.OK);
+    }
+
+    @Override
+    public CountPromoPostDTO countPromoPostUser(String userId) {
+        int userIdInt;
+
+        try {
+            userIdInt = Integer.parseInt(userId);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Parametros incorrectos");
+        }
+
+        User user = usersRepository.findAllUsers().stream().filter(p -> p.getUserId() == userIdInt).findFirst().orElse(null);
+
+        if (user == null){
+            throw new NotFoundException("Usuario no encontrado");
+        }
+
+        return new CountPromoPostDTO(
+                user.getUserId(),
+                user.getUserName(),
+                user.getPosts().stream().filter(Post::isHasPromo).count()
+        );
+
     }
 }

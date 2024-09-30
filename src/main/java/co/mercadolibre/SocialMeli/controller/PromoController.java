@@ -5,18 +5,20 @@ import co.mercadolibre.SocialMeli.service.IPromoPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/products")
 public class PromoController {
     @Autowired
     IPromoPostService iPromoPostService;
 
-    @PostMapping("/products/promo-post")
+    @PostMapping("/promo-post")
     public ResponseEntity<?> publicPromoPost(@RequestBody PromoPostRequestDTO promoPostRequestDTO){
-        return new ResponseEntity<>(iPromoPostService.publicPromoPost(promoPostRequestDTO), HttpStatus.OK);
+        return new ResponseEntity<>(iPromoPostService.postPromotion(promoPostRequestDTO), HttpStatus.OK);
+    }
+    @GetMapping("/promo-post/count")
+    public ResponseEntity<?> countPromoPostUser(@RequestParam String user_id){
+        return new ResponseEntity<>(iPromoPostService.countPromoPostUser(user_id), HttpStatus.OK);
     }
 }
