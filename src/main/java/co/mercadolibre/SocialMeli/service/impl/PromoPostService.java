@@ -25,11 +25,12 @@ public class PromoPostService implements IPromoPostService {
     @Autowired
     GlobalMethods globalMethods;
 
+    @Autowired
+    ObjectMapper mapper;
+
     @Override
     public ResponseDTO postPromotion(PromoPostRequestDTO promoPostRequestDTO) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
 
         if(promoPostRequestDTO.getDate() == null || promoPostRequestDTO.getUserId() == 0
                 || promoPostRequestDTO.getCategory() == 0 || promoPostRequestDTO.getPrice() == 0){
