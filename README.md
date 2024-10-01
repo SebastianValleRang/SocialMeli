@@ -164,7 +164,7 @@ Este archivo se encuentra en:
 
 - **US 0013:** Listar los vendedores inactivos, es decir que no han hecho publicaciones en los últimos 6 meses
   - **Endpoint:** /users/list/inactive_sellers
-  - **Responsables:** Leandro Ramírez y Sebastian Vallejo.
+  - **Responsables:** Ana Garcia, Angela Daza y Vanessa Lozano
   - **Reglas de verificación:** 
     1. Se considera como vendedor inactivo a aquellos vendedores que no han publicado en los últimos 6 meses. 
     2. Se valida que existan usuarios en el repositorio
