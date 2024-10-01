@@ -42,8 +42,11 @@ public class PostService implements IPostService {
             throw new BadRequestException("Formato de la request erroneo");
         }
 
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         Post post = mapper.convertValue(postDTO, Post.class);
         User user = globalMethods.getUserById(post.getUserId());
+
 
         if (user == null) {
             throw new NotFoundException("Usuario no encontrado");
@@ -62,6 +65,8 @@ public class PostService implements IPostService {
 
     @Override
     public RecentPostDTO getPostsByFollowedUsersLastTwoWeeks(int userId, String order) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         if (globalMethods.getUserById(userId) == null) {
             throw new NotFoundException("Usuario no encontrado");
         }

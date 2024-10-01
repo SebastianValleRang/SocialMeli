@@ -6,6 +6,7 @@ import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
+import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.IUserService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,14 @@ public class UserService implements IUserService {
 
     @Autowired
     GlobalMethods globalMethods;
+    @Autowired
+    IUsersRepository usersRepository;
 
 
     @Override
     public ResponseDTO followSeller(int userId, int userIdToFollow) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User user = globalMethods.getUserById(userId);
         User seller = globalMethods.getUserById(userIdToFollow);
 
@@ -68,6 +73,8 @@ public class UserService implements IUserService {
 
     @Override
     public ClientFollowedDTO listFollowedSellers(int userId, String order) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User user =  globalMethods.getUserById(userId);
         if (user == null){
             throw new NotFoundException("Usuario con el id %d no se ha encontrado.".formatted(userId));
@@ -89,6 +96,8 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseDTO unfollow(int userId, int userIdToUnfollow) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User user = globalMethods.getUserById(userId);
         User seller = globalMethods.getUserById(userIdToUnfollow);
         if (user == null){

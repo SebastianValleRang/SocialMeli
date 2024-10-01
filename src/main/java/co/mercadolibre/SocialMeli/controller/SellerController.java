@@ -26,4 +26,9 @@ public class SellerController {
         return new ResponseEntity<>(sellerService.listMostActiveSellers(), HttpStatus.OK);
     }
 
+    @GetMapping("/users/list/inactive_sellers")
+    public ResponseEntity<?> inactiveSellers(){
+        return new ResponseEntity<>(sellerService.inactiveSeller(), HttpStatus.OK);
+    }
+
 }
