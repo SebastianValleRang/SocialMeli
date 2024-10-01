@@ -3,8 +3,8 @@
 		"_postman_id": "41d5e452-a604-42f1-86e6-8fcdbf7882e1",
 		"name": "Sprint I",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409454",
-		"_collection_link": "https://equipo-dinamita-1456.postman.co/workspace/Equipo-dinamita-Workspace~672197d5-2784-4b1f-8320-b9012ee70857/collection/38182952-41d5e452-a604-42f1-86e6-8fcdbf7882e1?action=share&source=collection_link&creator=38409454"
+		"_exporter_id": "38409177",
+		"_collection_link": "https://equipo-dinamita-1456.postman.co/workspace/Equipo-dinamita-Workspace~672197d5-2784-4b1f-8320-b9012ee70857/collection/38182952-41d5e452-a604-42f1-86e6-8fcdbf7882e1?action=share&source=collection_link&creator=38409177"
 	},
 	"item": [
 		{
@@ -13,7 +13,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/users/3/follow/1",
+					"raw": "{{local}}/users/3/follow/5",
 					"host": [
 						"{{local}}"
 					],
@@ -21,7 +21,7 @@
 						"users",
 						"3",
 						"follow",
-						"1"
+						"5"
 					]
 				}
 			},
@@ -33,13 +33,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/users/1/followers/count",
+					"raw": "{{local}}/users/5/followers/count",
 					"host": [
 						"{{local}}"
 					],
 					"path": [
 						"users",
-						"1",
+						"5",
 						"followers",
 						"count"
 					]
@@ -53,13 +53,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/users/1/followers/list",
+					"raw": "{{local}}/users/5/followers/list",
 					"host": [
 						"{{local}}"
 					],
 					"path": [
 						"users",
-						"1",
+						"5",
 						"followers",
 						"list"
 					]
@@ -73,13 +73,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/users/3/followed/list",
+					"raw": "{{local}}/users/10/followed/list",
 					"host": [
 						"{{local}}"
 					],
 					"path": [
 						"users",
-						"3",
+						"10",
 						"followed",
 						"list"
 					]
@@ -94,7 +94,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"user_id\": 1,\n    \"date\": \"10-10-2024\",\n    \"product\": {\n        \"product_id\": 1,\n        \"product_name\": \"Mesedora\",\n        \"type\": \"Muebles\",\n        \"brand\": \"Sillas jairo\",\n        \"color\": \"Blanco\",\n        \"notes\": \"Realizada con madera de roble\"\n    },\n    \"category\": 100,\n    \"price\": 1500.50\n}\n\n",
+					"raw": "{\n    \"user_id\": 5,\n    \"date\": \"10-10-2024\",\n    \"product\": {\n        \"product_id\": 1,\n        \"product_name\": \"Mesedora\",\n        \"type\": \"Muebles\",\n        \"brand\": \"Sillas jairo\",\n        \"color\": \"Blanco\",\n        \"notes\": \"Realizada con madera de roble\"\n    },\n    \"category\": 100,\n    \"price\": 1500.50\n}\n\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -196,7 +196,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users/1/followed/list?order=name_asc",
+					"raw": "http://localhost:8080/users/3/followed/list?order=name_asc",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -204,7 +204,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1",
+						"3",
 						"followed",
 						"list"
 					],
@@ -234,7 +234,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/products/followed/3/list?order=date_asc",
+					"raw": "{{local}}/products/followed/3/list?order=date_desc",
 					"host": [
 						"{{local}}"
 					],
@@ -247,7 +247,17 @@
 					"query": [
 						{
 							"key": "order",
-							"value": "date_asc"
+							"value": "date_asc",
+							"disabled": true
+						},
+						{
+							"key": "order",
+							"value": "date_desc"
+						},
+						{
+							"key": "order",
+							"value": "prueba",
+							"disabled": true
 						}
 					]
 				}
@@ -287,7 +297,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{local}}/products/promo-post/count?user_id=1",
+					"raw": "{{local}}/products/promo-post/count?user_id=4",
 					"host": [
 						"{{local}}"
 					],
@@ -299,7 +309,7 @@
 					"query": [
 						{
 							"key": "user_id",
-							"value": "1"
+							"value": "4"
 						}
 					]
 				}
@@ -307,7 +317,7 @@
 			"response": []
 		},
 		{
-			"name": "US0012 / listMostActiveSellers",
+			"name": "BN US0012 / listMostActiveSellers",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -319,6 +329,25 @@
 					"path": [
 						"list",
 						"most_active_sellers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BN US0013 / inactiveSellers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/users/list/inactive_sellers",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"users",
+						"list",
+						"inactive_sellers"
 					]
 				}
 			},
