@@ -76,11 +76,13 @@ public class PromoPostService implements IPromoPostService {
 
         User user = usersRepository.findAllUsers().stream().filter(p -> p.getUserId() == userIdInt).findFirst().orElse(null);
 
-        if (user.getPosts().isEmpty()) throw new BadRequestException("El usuario %d no es un vendedor".formatted(userIdInt));
-
         if (user == null){
             throw new NotFoundException("Usuario no encontrado");
         }
+
+        if (user.getPosts().isEmpty()) throw new BadRequestException("El usuario %d no es un vendedor".formatted(userIdInt));
+
+
 
         return new CountPromoPostDTO(
                 user.getUserId(),
