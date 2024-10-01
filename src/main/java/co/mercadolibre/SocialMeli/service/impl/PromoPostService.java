@@ -39,6 +39,8 @@ public class PromoPostService implements IPromoPostService {
 
         Post post = mapper.convertValue(promoPostRequestDTO, Post.class);
 
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User user = usersRepository.findAllUsers().stream()
                 .filter(p->p.getUserId()==promoPostRequestDTO.getUserId())
                 .findFirst().orElse(null);
@@ -66,6 +68,8 @@ public class PromoPostService implements IPromoPostService {
         } catch (NumberFormatException e) {
             throw new BadRequestException("Parametros incorrectos");
         }
+
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
 
         User user = usersRepository.findAllUsers().stream().filter(p -> p.getUserId() == userIdInt).findFirst().orElse(null);
 
