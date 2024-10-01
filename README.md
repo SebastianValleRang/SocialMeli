@@ -81,7 +81,7 @@ A continuación, se presenta un diagrama que ilustra la estructura del proyecto,
 
 - **US 0006:** Obtener un listado de las publicaciones realizadas por los vendedores que un usuario sigue en las últimas dos semanas (para esto tener en cuenta ordenamiento por fecha, publicaciones más recientes primero).
   - **Endpoint:** /products/followed/{userId}/list
-  - **Responsable:** Leandro Ramírez y Sebastian Vallejo.
+  - **Responsables:** Leandro Ramírez y Sebastian Vallejo.
 
 
 - **US 0007:** Poder realizar la acción de “Unfollow” (dejar de seguir) a un determinado vendedor.
@@ -116,6 +116,11 @@ A continuación, se presenta un diagrama que ilustra la estructura del proyecto,
   - **Endpoint:** /products/promo-post/count?user_id={userId}
   - **Responsable:** Sebastian Vallejo.
 
+### Bonus:
+
+- **US 0012:** Listar los 5 vendedores con más posts
+  - **Endpoint:** /users/list/most_active_sellers
+  - **Responsables:** Leandro Ramírez y Sebastian Vallejo.
 
 ---
 ## Cómo Ejecutar el Proyecto

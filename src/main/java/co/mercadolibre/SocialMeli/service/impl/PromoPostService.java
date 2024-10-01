@@ -31,6 +31,9 @@ public class PromoPostService implements IPromoPostService {
     @Override
     public ResponseDTO postPromotion(PromoPostRequestDTO promoPostRequestDTO) {
 
+        if(usersRepository.findAllUsers().isEmpty()){
+            throw new NotFoundException("No hay usuarios registrados.");
+        }
 
         if(promoPostRequestDTO.getDate() == null || promoPostRequestDTO.getUserId() == 0
                 || promoPostRequestDTO.getCategory() == 0 || promoPostRequestDTO.getPrice() == 0){
@@ -39,7 +42,6 @@ public class PromoPostService implements IPromoPostService {
 
         Post post = mapper.convertValue(promoPostRequestDTO, Post.class);
 
-        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
 
         User user = usersRepository.findAllUsers().stream()
                 .filter(p->p.getUserId()==promoPostRequestDTO.getUserId())
@@ -61,6 +63,7 @@ public class PromoPostService implements IPromoPostService {
 
     @Override
     public CountPromoPostDTO countPromoPostUser(String userId) {
+
         int userIdInt;
 
         try {

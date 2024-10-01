@@ -305,6 +305,24 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "US0012 / listMostActiveSellers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/list/most_active_sellers",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"list",
+						"most_active_sellers"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
