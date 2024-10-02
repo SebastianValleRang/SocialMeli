@@ -3,16 +3,16 @@ package co.mercadolibre.SocialMeli.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ClientFollowedDTO {
+@NoArgsConstructor
+public class CountPostDTO {
     @JsonProperty("user_id")
     private int userId;
     @JsonProperty("user_name")
     private String userName;
-    @JsonProperty("followed")
-    private List<UserDTO> followedSellers;
+    @JsonProperty("post_count")
+    private long postCount;
 }
