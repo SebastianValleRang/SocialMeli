@@ -35,13 +35,6 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseDTO createPost(PostRequestDTO postDTO) {
-        mapper.registerModule(new JavaTimeModule());
-
-        if (postDTO.getDate() == null || postDTO.getUserId() == 0
-                || postDTO.getCategory() == 0 || postDTO.getPrice() == 0) {
-            throw new BadRequestException("Formato de la request erroneo");
-        }
-
         if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
 
         Post post = mapper.convertValue(postDTO, Post.class);

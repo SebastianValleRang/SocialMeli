@@ -1,13 +1,19 @@
 package co.mercadolibre.SocialMeli.config;
 
+import co.mercadolibre.SocialMeli.dto.ErrorDTO;
 import co.mercadolibre.SocialMeli.dto.response.ExceptionDTO;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.ConstraintViolation;
+import org.springframework.validation.ObjectError;
 
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
@@ -20,6 +26,35 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(BadRequestException e){
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> validationException(MethodArgumentNotValidException e){
+        return ResponseEntity.badRequest().body(
+                new ErrorDTO("Se encontraron los siguientes errores en las validaciones: @Valid del DTO",
+                        e.getAllErrors()
+                                .stream()
+                                .map(ObjectError::getDefaultMessage)
+                                .toList()
+                )
+        );
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> validationException(ConstraintViolationException e){
+        return ResponseEntity.badRequest().body(
+                new ErrorDTO("Se encontraron los siguientes errores en las validaciones en el PathVariable y RequestParam ",
+                        e.getConstraintViolations().stream()
+                                .map(ConstraintViolation::getMessage)
+                                .toList()
+                )
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> HttpMessageNotReadableException(HttpMessageNotReadableException e){
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Formato de fecha invalido.", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
     }
 }
