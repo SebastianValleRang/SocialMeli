@@ -5,19 +5,16 @@ import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
 import co.mercadolibre.SocialMeli.dto.response.RecentPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.ResponseDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
-import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
-import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
+import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.IPostService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +23,7 @@ import java.util.List;
 @Service
 public class PostService implements IPostService {
     @Autowired
-    UsersRepository usersRepository;
+    IUsersRepository usersRepository;
     @Autowired
     GlobalMethods globalMethods;
     @Autowired
@@ -35,13 +32,6 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseDTO createPost(PostRequestDTO postDTO) {
-        mapper.registerModule(new JavaTimeModule());
-
-        if (postDTO.getDate() == null || postDTO.getUserId() == 0
-                || postDTO.getCategory() == 0 || postDTO.getPrice() == 0) {
-            throw new BadRequestException("Formato de la request erroneo");
-        }
-
         if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
 
         Post post = mapper.convertValue(postDTO, Post.class);
