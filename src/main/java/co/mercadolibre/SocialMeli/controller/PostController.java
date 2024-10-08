@@ -1,10 +1,9 @@
 package co.mercadolibre.SocialMeli.controller;
 
 import co.mercadolibre.SocialMeli.dto.request.PostRequestDTO;
-import co.mercadolibre.SocialMeli.service.impl.PostService;
+import co.mercadolibre.SocialMeli.service.IPostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     @Autowired
-    PostService postService;
+    IPostService postService;
 
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody @Valid PostRequestDTO post){

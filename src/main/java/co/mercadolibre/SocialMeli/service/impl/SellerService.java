@@ -9,7 +9,7 @@ import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
-import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
+import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.ISellerService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,11 +24,10 @@ import java.util.List;
 @Service
 public class SellerService implements ISellerService {
     @Autowired
-    UsersRepository usersRepository;
+    IUsersRepository usersRepository;
     @Autowired
     GlobalMethods globalMethods;
-    @Autowired
-    ObjectMapper mapper;
+
 
     @Override
     public CountFollowersDTO countFollowers(int userId) {

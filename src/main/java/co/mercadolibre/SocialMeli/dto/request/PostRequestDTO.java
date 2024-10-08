@@ -21,8 +21,8 @@ public class PostRequestDTO {
     @Min(value = 1, message = "El id debe ser mayor a cero")
     private int userId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy")
     @NotNull(message = "El campo \"date\" no puede estar vacío.")
-    @JsonFormat(pattern = "dd-MM-yyyy")
     @PastOrPresent(message = "No se puede colocar una fecha futura.")
     private LocalDate date;
 

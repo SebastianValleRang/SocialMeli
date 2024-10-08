@@ -1,8 +1,6 @@
 package co.mercadolibre.SocialMeli.controller;
 
 import co.mercadolibre.SocialMeli.service.ISellerService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

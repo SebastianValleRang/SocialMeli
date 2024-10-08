@@ -7,9 +7,8 @@ import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
-import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
+import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.IPromoPostService;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class PromoPostService implements IPromoPostService {
     @Autowired
-    UsersRepository usersRepository;
+    IUsersRepository usersRepository;
 
     @Autowired
     GlobalMethods globalMethods;
