@@ -19,8 +19,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -66,19 +65,22 @@ class FollowUser{
     void followSellerSellerDoesntExistsTest(){
         //Arrange
         User user = Data.createUser(1,"Leandro");
-
+        ResponseDTO expectedResponse = new ResponseDTO("No existe un vendedor con el id 2.",HttpStatus.NOT_FOUND);
         //Simulation
         when(iUsersRepository.findAllUsers()).thenReturn(List.of(user));
         when(globalMethods.getUserById(1)).thenReturn(user);
         when(globalMethods.getUserById(2)).thenReturn(null);
 
         //Act & Assert
-        assertThrows(NotFoundException.class, () -> userService.followSeller(1,2));
+        NotFoundException notFoundException =assertThrows(NotFoundException.class, () -> userService.followSeller(1,2));
+        assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
         verify(iUsersRepository).findAllUsers();
         verify(globalMethods, times(2)).getUserById(anyInt());
         verify(globalMethods, never()).isNotSeller(any());
 
     }
 }
+
+
 
 }
