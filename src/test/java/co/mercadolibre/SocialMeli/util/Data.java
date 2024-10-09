@@ -4,9 +4,14 @@ import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.User;
+import co.mercadolibre.SocialMeli.entity.Post;
+import co.mercadolibre.SocialMeli.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 
 public class Data {
     static ObjectMapper objectMapper = new ObjectMapper();
@@ -74,4 +79,13 @@ public class Data {
 
     }
 
+    public static User createUser(int id, String userName){
+        return new User(id, userName, new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
+    }
+    public static User createSeller(int id, String userName){
+        List<Post> posts = new ArrayList<>();
+        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
+        posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
+        return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
+    }
 }
