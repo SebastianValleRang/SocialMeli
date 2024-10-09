@@ -40,7 +40,7 @@ public class UserService implements IUserService {
             throw new NotFoundException("No existe un usuario con el id %d.".formatted(userId));
         }
         if (seller == null){
-            throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
+        throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
         }
 
         //Validacion vendedor
