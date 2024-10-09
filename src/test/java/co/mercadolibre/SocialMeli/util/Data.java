@@ -1,13 +1,5 @@
 package co.mercadolibre.SocialMeli.util;
 
-
-import co.mercadolibre.SocialMeli.dto.request.PostRequestDTO;
-import co.mercadolibre.SocialMeli.entity.Post;
-import co.mercadolibre.SocialMeli.entity.Product;
-import co.mercadolibre.SocialMeli.entity.User;
-
-import java.time.LocalDate;
-import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
