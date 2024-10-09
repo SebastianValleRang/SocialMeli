@@ -18,22 +18,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
@@ -166,4 +166,38 @@ public class PostServiceTest {
 
     }
 
+    @Nested
+    class showPostLastTwoWeeks{
+        @DisplayName("T0008: git Verificar que los post son unicamente de las últimas 2 semanas ")
+        @Test
+        void getPostsFromFollowedLastTwoWeeksTest() {
+            //Arrange
+            User client = Data.getUserThatFollows1Seller();
+            int clientId = client.getUserId();
+
+            Product product = new Product(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
+            ProductDTO productDTO = new ProductDTO(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
+
+            Post post = new Post(1, 2, LocalDate.parse("2024-10-09"), product,1,223.3);
+            PostResponseDTO postDTO = new PostResponseDTO(1, 2, LocalDate.parse("2024-10-09"), productDTO,1,223.3);
+
+            List<PostResponseDTO> expectedPosts = List.of(postDTO);
+
+            //Act
+            when(iUsersRepository.findAllUsers()).thenReturn(List.of(client));
+            when(globalMethods.getUserById(clientId)).thenReturn(client);
+            when(mapper.convertValue(post, PostResponseDTO.class)).thenReturn(postDTO);
+
+            RecentPostDTO found = postService.getPostsByFollowedUsersLastTwoWeeks(clientId, null);
+
+            //Assert
+            verify(iUsersRepository).findAllUsers();
+            verify(globalMethods, times(2)).getUserById(clientId);
+            verify(mapper).convertValue(any(), eq(PostResponseDTO.class));
+
+            Assertions.assertEquals(clientId, found.getUserId());
+            Assertions.assertEquals(1, found.getRecentPosts().size());
+            Assertions.assertEquals(expectedPosts, found.getRecentPosts());
+        }
+    }
 }
