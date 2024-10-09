@@ -210,12 +210,6 @@ class FollowUser{
     }
 }
 
-
-
-
-
-
-
     @Nested
     class T0003{
         @DisplayName("Ordenar seguidos - Camino Bueno")
@@ -225,7 +219,7 @@ class FollowUser{
             //Arrange
             int userId = 1;
             String order = null;
-            List<User> usersList = Data.getUsersListTest();
+            List<User> usersList = Data.getUsersListTestT0003();
             User userById = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null);
             ClientFollowedDTO expectedJson = Data.getlistFollowedSellersTest();
 
@@ -271,7 +265,7 @@ class FollowUser{
             //Arrange
             int userId = 1;
             String order = null;
-            List<User> usersList = Data.getUsersListTest();
+            List<User> usersList = Data.getUsersListTestT0003();
 
             //Act & Assert
             when(iUsersRepository.findAllUsers()).thenReturn(usersList);
@@ -296,9 +290,14 @@ class FollowUser{
             String order = null;
             List<User> usersList = Data.getUsersListTestT0003();
             User userById = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null);
+
             SellerFollowersDTO expectedJson = Data.getlistFollowersSellersTest();
+            System.out.println(userId);
+            System.out.println(userById);
+            System.out.println(expectedJson);
 
             //Act
+            when(iUsersRepository.findAllUsers()).thenReturn(usersList);
             when(globalMethods.getUserById(userId)).thenReturn(userById);
             when(globalMethods.isNotSeller(userById)).thenReturn(false);
 
@@ -311,7 +310,7 @@ class FollowUser{
 
         }
 
-        @DisplayName("Ordenar seguidores - Camino Malo, no encuentra el usuario")
+        @DisplayName("Ordenar seguidores - Camino Malo, no hay ususarios")
         @Test
         void orderingFollowersBadUsers(){
 
@@ -319,8 +318,33 @@ class FollowUser{
             int userId = 1;
             String order = null;
             User userById = null;
+            List<User> usersList = new ArrayList<>();
 
             //Act & Assert
+            when(iUsersRepository.findAllUsers()).thenReturn(usersList);
+
+            NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> {
+                sellerService.listFollowers(userId, order);
+            });
+
+            Assertions.assertEquals("No hay usuarios registrados" , notFoundException.getMessage());
+            verify(globalMethods, never()).getUserById(anyInt());
+            verify(globalMethods, never()).isNotSeller(any(User.class));
+
+        }
+
+        @DisplayName("Ordenar seguidores - Camino Malo, no encuentra al vendedor")
+        @Test
+        void orderingFollowersBadSeller(){
+
+            //Arrange
+            int userId = 1;
+            String order = null;
+            User userById = null;
+            List<User> usersList = Data.getUsersListTestT0003();
+
+            //Act & Assert
+            when(iUsersRepository.findAllUsers()).thenReturn(usersList);
             when(globalMethods.getUserById(userId)).thenReturn(userById);
 
             NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> {
@@ -344,6 +368,7 @@ class FollowUser{
             User userById = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null);
 
             //Act & Assert
+            when(iUsersRepository.findAllUsers()).thenReturn(usersList);
             when(globalMethods.getUserById(userId)).thenReturn(userById);
             when(globalMethods.isNotSeller(userById)).thenReturn(true);
 
@@ -358,5 +383,6 @@ class FollowUser{
         }
 
     }
+
 
 }
