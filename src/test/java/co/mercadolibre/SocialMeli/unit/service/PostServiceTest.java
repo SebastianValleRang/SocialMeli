@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
@@ -49,8 +49,8 @@ public class PostServiceTest {
             Product product = new Product(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
             ProductDTO productDTO = new ProductDTO(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
 
-            Post post = new Post(1, 2, LocalDate.parse("2024-10-03"), product,1,223.3);
-            PostResponseDTO postDTO = new PostResponseDTO(1, 2, LocalDate.parse("2024-10-03"), productDTO,1,223.3);
+            Post post = new Post(1, 2, LocalDate.parse("2024-10-09"), product,1,223.3);
+            PostResponseDTO postDTO = new PostResponseDTO(1, 2, LocalDate.parse("2024-10-09"), productDTO,1,223.3);
 
             List<PostResponseDTO> expectedPosts = List.of(postDTO);
 
@@ -62,7 +62,12 @@ public class PostServiceTest {
             RecentPostDTO found = postService.getPostsByFollowedUsersLastTwoWeeks(clientId, null);
 
             //Assert
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods, times(2)).getUserById(clientId);
+            verify(mapper).convertValue(any(), eq(PostResponseDTO.class));
+
             Assertions.assertEquals(clientId, found.getUserId());
+            Assertions.assertEquals(1, found.getRecentPosts().size());
             Assertions.assertEquals(expectedPosts, found.getRecentPosts());
         }
     }
