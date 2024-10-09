@@ -62,7 +62,7 @@ class FollowUser{
     }
     @DisplayName("T-0001: Follow seller Not found")
     @Test
-    void followSellerSellerDoesntExistsTest(){
+    void followSellerDoesntExistsTest(){
         //Arrange
         User user = Data.createUser(1,"Leandro");
         ResponseDTO expectedResponse = new ResponseDTO("No existe un vendedor con el id 2.",HttpStatus.NOT_FOUND);
