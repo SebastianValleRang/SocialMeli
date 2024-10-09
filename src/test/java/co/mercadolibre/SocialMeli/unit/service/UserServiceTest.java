@@ -66,6 +66,7 @@ class FollowUser{
         //Arrange
         User user = Data.createUser(1,"Leandro");
         ResponseDTO expectedResponse = new ResponseDTO("No existe un vendedor con el id 2.",HttpStatus.NOT_FOUND);
+
         //Simulation
         when(iUsersRepository.findAllUsers()).thenReturn(List.of(user));
         when(globalMethods.getUserById(1)).thenReturn(user);
@@ -77,6 +78,52 @@ class FollowUser{
         verify(iUsersRepository).findAllUsers();
         verify(globalMethods, times(2)).getUserById(anyInt());
         verify(globalMethods, never()).isNotSeller(any());
+
+    }
+}
+
+@Nested
+    class UnfollowUser{
+    @DisplayName("T-0002: Unfollow seller Ok")
+    @Test
+    void unfollowSellerOkTest(){
+        //Arrange
+        User follower = Data.createUser(1,"Leandro");
+        User seller = Data.createFollowedSeller(2,"Pablo", follower);
+        ResponseDTO expectedResponse = new ResponseDTO("El usuario 1 ha dejado de seguir al vendedor 2.", HttpStatus.OK);
+
+        //Simulation
+        when(iUsersRepository.findAllUsers()).thenReturn(List.of(follower,seller));
+        when(globalMethods.getUserById(1)).thenReturn(follower);
+        when(globalMethods.getUserById(2)).thenReturn(seller);
+
+        //Act
+        ResponseDTO realResponse = userService.unfollow(1,2);
+
+        //Assert
+        assertEquals(expectedResponse,realResponse);
+        verify(iUsersRepository).findAllUsers();
+        verify(globalMethods, times(2)).getUserById(anyInt());
+
+    }
+
+    @DisplayName("T-0002: Unfollow seller Not found")
+    @Test
+    void unfollowSellerDoesntExistsTest(){
+        //Arrange
+        User user = Data.createUser(1,"Leandro");
+        ResponseDTO expectedResponse = new ResponseDTO("No existe un vendedor con el id 2.",HttpStatus.NOT_FOUND);
+
+        //Simulation
+        when(iUsersRepository.findAllUsers()).thenReturn(List.of(user));
+        when(globalMethods.getUserById(1)).thenReturn(user);
+        when(globalMethods.getUserById(2)).thenReturn(null);
+
+        //Act & Assert
+        NotFoundException notFoundException =assertThrows(NotFoundException.class, () -> userService.unfollow(1,2));
+        assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+        verify(iUsersRepository).findAllUsers();
+        verify(globalMethods, times(2)).getUserById(anyInt());
 
     }
 }
