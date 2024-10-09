@@ -43,6 +43,8 @@ public class SellerService implements ISellerService {
 
     @Override
     public SellerFollowersDTO listFollowers(int userId, String order) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User sellerToCheck = globalMethods.getUserById(userId);
         if (sellerToCheck == null){
             throw new NotFoundException("El usuario con el id %d no se ha encontrado".formatted(userId));
