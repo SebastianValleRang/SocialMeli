@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
@@ -54,7 +55,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> HttpMessageNotReadableException(HttpMessageNotReadableException e){
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Formato de fecha invalido.", HttpStatus.BAD_REQUEST);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Formato incorrecto.", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Tipo de parámetro incorrecto.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
+
     }
 }

@@ -70,6 +70,8 @@ public class PostService implements IPostService {
             if (order.equalsIgnoreCase("date_asc")) {
                 postList.sort(Comparator.comparing(PostResponseDTO::getDate));
             } else if (order.equalsIgnoreCase("date_desc")) {
+                postList.sort(Comparator.comparing(PostResponseDTO::getDate).reversed());
+
             } else {
                 throw new BadRequestException("Orden no válido.");
             }
