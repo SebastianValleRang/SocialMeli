@@ -39,7 +39,7 @@ public class PostServiceTest {
 
     @Nested
     class showPostLastTwoWeeks{
-        @DisplayName("T0008: Verificar que los post son unicamente de las últimas 2 semanas ")
+        @DisplayName("T0008: git Verificar que los post son unicamente de las últimas 2 semanas ")
         @Test
         void getPostsFromFollowedLastTwoWeeksTest() {
             //Arrange
