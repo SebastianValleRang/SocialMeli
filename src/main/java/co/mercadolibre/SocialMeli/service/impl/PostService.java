@@ -86,6 +86,5 @@ public class PostService implements IPostService {
                     .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
                     .toList());
         }
-
     }
 }
