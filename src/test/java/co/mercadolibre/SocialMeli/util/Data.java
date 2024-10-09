@@ -22,4 +22,12 @@ public class Data {
         posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
     }
+    public static User createFollowedSeller(int id, String userName, User follower){
+        List<User> followers = new ArrayList<>();
+        followers.add(follower);
+        List<Post> posts = new ArrayList<>();
+        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
+        posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
+        return new User(id, userName, followers, new ArrayList<>(), posts);
+    }
 }
