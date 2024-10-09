@@ -56,10 +56,10 @@ public class UsersRepository implements IUsersRepository {
         Product mesa = iProductRepository.findAllProducts().stream()
                         .filter(p -> p.getProductId() == 5).findFirst().orElse(null);
 
-        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.parse("2024-10-05"),mesedora,1,223.3));
+        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.parse("2024-10-03"),mesedora,1,223.3));
         userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.parse("2024-09-22"),almohadaDeChayanne,2,227.7));
 
-        userMartin.getPosts().add(new Post(1,userMartin.getUserId(), LocalDate.parse("2024-10-03"), mesa,1,300.0));
+        userMartin.getPosts().add(new Post(1,userMartin.getUserId(), LocalDate.parse("2024-10-05"), mesa,1,300.0));
 
         userPepito.getPosts().add(new Post(1,userPepito.getUserId(),LocalDate.parse("2021-10-03"), almohadaDeChayanne,4,200.0));
 

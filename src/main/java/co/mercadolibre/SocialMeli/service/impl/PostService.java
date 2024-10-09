@@ -73,16 +73,15 @@ public class PostService implements IPostService {
             postList.addAll(userFollowed.getPosts().stream()
                     .filter(p -> p.getDate().isAfter(lastTwoWeeks))
                     .map(post -> mapper.convertValue(post, PostResponseDTO.class))
-                    .sorted(Comparator.comparing(PostResponseDTO::getDate).reversed())
+
                     .toList());
         }
+        postList.sort(Comparator.comparing(PostResponseDTO::getDate).reversed());
 
         if (order != null) {
             if (order.equalsIgnoreCase("date_asc")) {
                 postList.sort(Comparator.comparing(PostResponseDTO::getDate));
             } else if (order.equalsIgnoreCase("date_desc")) {
-                postList.sort(Comparator.comparing(PostResponseDTO::getDate).reversed());
-
             } else {
                 throw new BadRequestException("Orden no válido.");
             }
