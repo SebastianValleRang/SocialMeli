@@ -13,8 +13,8 @@ public class ProductDTO {
 
     @JsonProperty("product_id")
     @NotNull(message = "El campo no puede estar vacío.")
-    @Min(value = 1, message = "El id debe ser mayor a cero") //probar que no reciba otra cosa que no sea int
-    private int productId;
+    @Min(value = 1, message = "El id del producto debe ser mayor a cero") //probar que no reciba otra cosa que no sea int
+    private Integer productId;
 
 
     @JsonProperty("product_name")

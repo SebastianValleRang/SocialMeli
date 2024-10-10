@@ -25,7 +25,7 @@ public class PostController {
     }
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> getPostByUserLastTwoWeeks(@PathVariable @Positive(message = "El id debe ser positivo") int userId, @RequestParam(required = false) String order){
+    public ResponseEntity<?> getPostByUserLastTwoWeeks(@PathVariable @Positive(message = "El id debe ser positivo") int userId, @RequestParam(required = false)  String order){
         return new ResponseEntity<>(postService.getPostsByFollowedUsersLastTwoWeeks(userId,order), HttpStatus.OK);
     }
 

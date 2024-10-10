@@ -33,7 +33,7 @@ public class IntegrationData {
         return new SellerFollowersDTO(
                 userJuanPerez.getUserId(),
                 userJuanPerez.getUserName(),
-                new ArrayList<UserDTO>()
+                List.of(new UserDTO(2,"LeandroDiaz"), new UserDTO(100,"Joy"))
         );
 
     }

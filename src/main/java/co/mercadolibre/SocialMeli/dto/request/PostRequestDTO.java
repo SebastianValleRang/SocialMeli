@@ -19,22 +19,23 @@ public class PostRequestDTO {
     @JsonProperty("user_id")
     @NotNull(message = "El id no puede estar vacio.")
     @Min(value = 1, message = "El id debe ser mayor a cero")
-    private int userId;
+    private Integer userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy")
-    @NotNull(message = "El campo \"date\" no puede estar vacío.")
+    @NotNull(message = "El campo no puede estar vacío.")
     @PastOrPresent(message = "No se puede colocar una fecha futura.")
     private LocalDate date;
 
     @JsonProperty("product")
     @Valid
-    @NotNull(message = "El campo \"product\" no puede estar vacío.")
+    @NotNull(message = "El campo no puede estar vacío.")
     private ProductDTO product;
 
-    @NotNull(message = "El campo \"category\" no puede estar vacío.")
-    private int category;
+    @NotNull(message = "El campo no puede estar vacío.")
+    private Integer category;
 
-    @NotNull(message = "El campo \"price\" no puede estar vacio.")
+    @NotNull(message = "El campo no puede estar vacio.")
+    @Min(value = 1, message = "El precio minimo por producto es de 1")
     @Max(value = 10000000, message = "El precio máximo por producto es de 10.000.000")
-    private double price;
+    private Double price;
 }
