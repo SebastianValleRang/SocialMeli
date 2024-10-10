@@ -174,7 +174,8 @@ Este archivo se encuentra en:
 
 ## Tests 
 
-Para cumplir los estándares de calidad de Mercado Libre implementamos diferentes validación según lo requerido, así como test unitarios y de integración. Esto con el objetivo de alcanzar una cobertura de código testeado mayór al 80%.
+Para cumplir los estándares de calidad de Mercado Libre implementamos diferentes validación según lo requerido, así como test unitarios y de integración. Esto con el objetivo de alcanzar una cobertura de código testeado mayor al 80%.
+
 <p align="center"><img src="src/main/resources/CoverageAlcanzado.png" width="100%"></p>
 
 ### Test unitarios requeridos:
@@ -242,7 +243,7 @@ Para cumplir los estándares de calidad de Mercado Libre implementamos diferente
 
 - **T 0010:** Verifica que existen vendedores para devolver la lista de vendedores más activos
   - **User story:** US0007
-  - **Responsable:** Leandro Diaz
+  - **Responsable:** Sebastian Vallejo
   - **Comportamiento esperado:** Se cumple: Devuelve la lista de vendedores más activos. No se cumple: Notifica la no existencia mediante una excepción.
 
 
@@ -255,7 +256,7 @@ Para cumplir los estándares de calidad de Mercado Libre implementamos diferente
 
 - **TI 0003:** Verificar que en los endpoints /users/{UserID}/followers/list?order=...  /users/{UserID}/followed/list?order=... el tipo de ordenamiento alfabético exista
   - **User story:** US0008
-  - **Responsable:** Leandro Diaz
+  - **Responsable:** Sebastian Vallejo
   - **Comportamiento esperado:** Se cumple:Devuelve un ResponseDTO con el mensaje y el HttpStatus 200. No se cumple: Notifica la no existencia mediante un ExceptionDTO con status bad request
 
 - **TI 0005:** Verificar que en el endpoint /products/followed/{userId}/list?order=... el tipo de ordenamiento por fecha exista
