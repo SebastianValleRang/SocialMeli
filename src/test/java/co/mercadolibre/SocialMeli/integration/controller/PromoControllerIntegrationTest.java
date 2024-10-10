@@ -76,4 +76,29 @@ public class PromoControllerIntegrationTest {
 
         }
     }
+
+    @Nested
+    class createPromoPost{
+        @DisplayName("TI0011: Crea un post con promoción")
+        @Test
+        void createPromoPostOk() throws Exception{
+            CountPromoPostDTO expected = new CountPromoPostDTO(1, "JuanPerez", 0);
+            int userId = 1;
+
+            ObjectWriter writer = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .configure(SerializationFeature.WRAP_ROOT_VALUE, false)
+                    .writer();
+
+            String expectedJson = writer.writeValueAsString(expected);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/promo-post/count", userId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("userId", "1"))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            Assertions.assertEquals(expectedJson, result.getResponse().getContentAsString());
+        }
+    }
 }
