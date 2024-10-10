@@ -1,9 +1,6 @@
 package co.mercadolibre.SocialMeli.util;
 
-import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
-import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
-import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
-import co.mercadolibre.SocialMeli.dto.response.UserDTO;
+import co.mercadolibre.SocialMeli.dto.response.*;
 import co.mercadolibre.SocialMeli.entity.User;
 
 import java.util.ArrayList;
@@ -13,6 +10,9 @@ public class IntegrationData {
 
     public static CountFollowersDTO getCountSellerDTO() {
         return new CountFollowersDTO(1, "JuanPerez", 2);
+    }
+    public static List<CountPostDTO> getCountSellerPostDTO() {
+        return  List.of(new CountPostDTO(1, "JuanPerez", 2));
     }
 
     public static ClientFollowedDTO getClientFollowedDTO() {
