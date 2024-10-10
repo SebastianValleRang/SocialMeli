@@ -24,9 +24,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -45,10 +47,10 @@ public class PostServiceTest {
     PostService postService;
 
     @Nested
-    class PostsFollowed{
+    class PostsFollowed {
         @DisplayName("T-0005: Posts by Followed Users Last Two Weeks Ok")
         @Test
-        void getPostsByFollowedUsersLastTwoWeeksOkTest(){
+        void getPostsByFollowedUsersLastTwoWeeksOkTest() {
             //Arrange
             List<User> userList = Data.getUsersListTest();
             User user = userList.stream()
@@ -74,20 +76,20 @@ public class PostServiceTest {
                     .thenReturn(posts.get(1))
                     .thenReturn(posts.get(2));
             //Act
-            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_asc");
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4, "date_asc");
 
             //Assert
-            assertEquals(mockOutDTO,obtained);
+            assertEquals(mockOutDTO, obtained);
             verify(iUsersRepository).findAllUsers();
             verify(globalMethods, times(2)).getUserById(anyInt());
         }
 
         @DisplayName("T-0005: Posts by Followed Users Last Two Weeks Bad Request")
         @Test
-        void getPostsByFollowedUsersLastTwoWeeksNoOrderTest(){
+        void getPostsByFollowedUsersLastTwoWeeksNoOrderTest() {
 
             //Arrange
-            ResponseDTO expectedResponse = new ResponseDTO("Orden no válido.",HttpStatus.BAD_REQUEST);
+            ResponseDTO expectedResponse = new ResponseDTO("Orden no válido.", HttpStatus.BAD_REQUEST);
             List<User> userList = Data.getUsersListTest();
             User user = userList.stream()
                     .filter(u -> u.getUserId() == 4)
@@ -113,7 +115,7 @@ public class PostServiceTest {
                     .thenReturn(posts.get(2));
 
             //Act & Assert
-            BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> postService.getPostsByFollowedUsersLastTwoWeeks(4,"prueba"));
+            BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> postService.getPostsByFollowedUsersLastTwoWeeks(4, "prueba"));
             assertTrue(badRequestException.getMessage().contains(expectedResponse.getMessage()));
             verify(iUsersRepository).findAllUsers();
             verify(globalMethods, times(2)).getUserById(anyInt());
@@ -122,22 +124,22 @@ public class PostServiceTest {
 
         @DisplayName("T-0005: Posts by Followed Users Last Two Weeks Not Found")
         @Test
-        void getPostsByFollowedUsersLastTwoWeeksNotFoundTest(){
+        void getPostsByFollowedUsersLastTwoWeeksNotFoundTest() {
             //Arrange
-            ResponseDTO expectedResponse = new ResponseDTO("No hay usuarios registrados",HttpStatus.NOT_FOUND);
+            ResponseDTO expectedResponse = new ResponseDTO("No hay usuarios registrados", HttpStatus.NOT_FOUND);
 
             //Simulation
             when(iUsersRepository.findAllUsers()).thenReturn(Collections.EMPTY_LIST);
 
             //Act & Assert
-            NotFoundException notFoundException = assertThrows(NotFoundException.class, () ->  postService.getPostsByFollowedUsersLastTwoWeeks(1,"prueba"));
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> postService.getPostsByFollowedUsersLastTwoWeeks(1, "prueba"));
             assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
         }
 
     }
 
     @Nested
-    class showPostLastTwoWeeks{
+    class showPostLastTwoWeeks {
         @DisplayName("T0008: git Verificar que los post son unicamente de las últimas 2 semanas ")
         @Test
         void getPostsFromFollowedLastTwoWeeksTest() {
@@ -145,11 +147,11 @@ public class PostServiceTest {
             User client = Data.getUserThatFollows1Seller();
             int clientId = client.getUserId();
 
-            Product product = new Product(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
-            ProductDTO productDTO = new ProductDTO(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
+            Product product = new Product(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+            ProductDTO productDTO = new ProductDTO(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
 
-            Post post = new Post(1, 2, LocalDate.parse("2024-10-09"), product,1,223.3);
-            PostResponseDTO postDTO = new PostResponseDTO(1, 2, LocalDate.parse("2024-10-09"), productDTO,1,223.3);
+            Post post = new Post(1, 2, LocalDate.parse("2024-10-09"), product, 1, 223.3);
+            PostResponseDTO postDTO = new PostResponseDTO(1, 2, LocalDate.parse("2024-10-09"), productDTO, 1, 223.3);
 
             List<PostResponseDTO> expectedPosts = List.of(postDTO);
 
@@ -173,16 +175,16 @@ public class PostServiceTest {
 
 
     @Nested
-    class OrderListFollowed{
+    class OrderListFollowed {
         @DisplayName("T-0006: Posts by Followed Users Last Two Weeks Order ASC Ok")
         @Test
-        void getPostsByASCTestOk(){
+        void getPostsByASCTestOk() {
             //Arrange
             List<User> userList = Data.getUsersListTest();
             User user = userList.stream()
                     .filter(u -> u.getUserId() == 4)
-                            .findFirst()
-                                    .orElse(null);
+                    .findFirst()
+                    .orElse(null);
             List<PostResponseDTO> posts = user.getFollowed().stream()
                     .flatMap(p -> p.getPosts().stream())
                     .map(post -> Data.convertPostToPostResponseDTO(post))
@@ -202,7 +204,7 @@ public class PostServiceTest {
                     .thenReturn(posts.get(2));
 
             //Act
-            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_asc");
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4, "date_asc");
 
             //Assert
             assertEquals(mockOutDTO, obtained);
@@ -212,7 +214,7 @@ public class PostServiceTest {
 
         @DisplayName("T-0006: Posts by Followed Users Last Two Weeks Order DESC Ok")
         @Test
-        void getPostsByDESCTestOk(){
+        void getPostsByDESCTestOk() {
             //Arrange
             List<User> userList = Data.getUsersListTest();
             User user = userList.stream()
@@ -238,7 +240,7 @@ public class PostServiceTest {
                     .thenReturn(posts.get(2));
 
             //Act
-            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_desc");
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4, "date_desc");
 
             //Assert
             assertEquals(mockOutDTO, obtained);
