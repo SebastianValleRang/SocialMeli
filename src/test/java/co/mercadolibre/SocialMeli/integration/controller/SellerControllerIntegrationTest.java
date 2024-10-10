@@ -121,7 +121,7 @@ public class SellerControllerIntegrationTest {
 
     @Nested
     class BonusListMostActiveSellers {
-        @DisplayName("TI-0010: Listar los vendedores con más seguidores")
+        @DisplayName("TI-0010: Listar los vendedores con más post")
         @Test
         void listMostActiveSellersOKTest() throws Exception {
 
