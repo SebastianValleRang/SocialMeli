@@ -57,24 +57,8 @@ public class PostServiceTest {
                     .orElse(null);
             List<PostResponseDTO> posts = user.getFollowed().stream()
                     .flatMap(p -> p.getPosts().stream())
-                    .map(post -> {
-                        Product product = post.getProduct();
-                        return new PostResponseDTO(
-                                post.getUserId(),
-                                post.getPostId(),
-                                post.getDate(),
-                                new ProductDTO(
-                                        product.getProductId(),
-                                        product.getProductName(),
-                                        product.getType(),
-                                        product.getBrand(),
-                                        product.getColor(),
-                                        product.getNotes()
-                                ),
-                                post.getCategory(),
-                                post.getPrice()
-                        );
-                    }).collect(Collectors.toList());
+                    .map(post -> Data.convertPostToPostResponseDTO(post))
+                    .collect(Collectors.toList());
 
             posts.sort(Comparator.comparing(PostResponseDTO::getDate));
             RecentPostDTO mockOutDTO = new RecentPostDTO(
@@ -111,24 +95,8 @@ public class PostServiceTest {
                     .orElse(null);
             List<PostResponseDTO> posts = user.getFollowed().stream()
                     .flatMap(p -> p.getPosts().stream())
-                    .map(post -> {
-                        Product product = post.getProduct();
-                        return new PostResponseDTO(
-                                post.getUserId(),
-                                post.getPostId(),
-                                post.getDate(),
-                                new ProductDTO(
-                                        product.getProductId(),
-                                        product.getProductName(),
-                                        product.getType(),
-                                        product.getBrand(),
-                                        product.getColor(),
-                                        product.getNotes()
-                                ),
-                                post.getCategory(),
-                                post.getPrice()
-                        );
-                    }).collect(Collectors.toList());
+                    .map(post -> Data.convertPostToPostResponseDTO(post))
+                    .collect(Collectors.toList());
 
             posts.sort(Comparator.comparing(PostResponseDTO::getDate));
             RecentPostDTO mockOutDTO = new RecentPostDTO(
@@ -217,24 +185,8 @@ public class PostServiceTest {
                                     .orElse(null);
             List<PostResponseDTO> posts = user.getFollowed().stream()
                     .flatMap(p -> p.getPosts().stream())
-                    .map(post -> {
-                                    Product product = post.getProduct();
-                                    return new PostResponseDTO(
-                                            post.getUserId(),
-                                            post.getPostId(),
-                                            post.getDate(),
-                                            new ProductDTO(
-                                                    product.getProductId(),
-                                                    product.getProductName(),
-                                                    product.getType(),
-                                                    product.getBrand(),
-                                                    product.getColor(),
-                                                    product.getNotes()
-                                            ),
-                                            post.getCategory(),
-                                            post.getPrice()
-                                    );
-                    }).collect(Collectors.toList());
+                    .map(post -> Data.convertPostToPostResponseDTO(post))
+                    .collect(Collectors.toList());
 
             posts.sort(Comparator.comparing(PostResponseDTO::getDate));
             RecentPostDTO mockOutDTO = new RecentPostDTO(
@@ -269,24 +221,8 @@ public class PostServiceTest {
                     .orElse(null);
             List<PostResponseDTO> posts = user.getFollowed().stream()
                     .flatMap(p -> p.getPosts().stream())
-                    .map(post -> {
-                        Product product = post.getProduct();
-                        return new PostResponseDTO(
-                                post.getUserId(),
-                                post.getPostId(),
-                                post.getDate(),
-                                new ProductDTO(
-                                        product.getProductId(),
-                                        product.getProductName(),
-                                        product.getType(),
-                                        product.getBrand(),
-                                        product.getColor(),
-                                        product.getNotes()
-                                ),
-                                post.getCategory(),
-                                post.getPrice()
-                        );
-                    }).collect(Collectors.toList());
+                    .map(post -> Data.convertPostToPostResponseDTO(post))
+                    .collect(Collectors.toList());
 
             posts.sort(Comparator.comparing(PostResponseDTO::getDate).reversed());
             RecentPostDTO mockOutDTO = new RecentPostDTO(

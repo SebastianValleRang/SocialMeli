@@ -1,6 +1,8 @@
 package co.mercadolibre.SocialMeli.util;
 
+import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
+import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 
 import co.mercadolibre.SocialMeli.dto.response.UserDTO;
@@ -198,5 +200,23 @@ public class Data {
         Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
         posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, followers, new ArrayList<>(), posts);
+    }
+    public static PostResponseDTO convertPostToPostResponseDTO(Post post){
+        Product product = post.getProduct();
+        return new PostResponseDTO(
+                post.getUserId(),
+                post.getPostId(),
+                post.getDate(),
+                new ProductDTO(
+                        product.getProductId(),
+                        product.getProductName(),
+                        product.getType(),
+                        product.getBrand(),
+                        product.getColor(),
+                        product.getNotes()
+                ),
+                post.getCategory(),
+                post.getPrice()
+        );
     }
 }
