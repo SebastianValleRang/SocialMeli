@@ -16,6 +16,15 @@ import java.util.List;
 public class Data {
     static ObjectMapper objectMapper = new ObjectMapper();
 
+    public static User getSellerWithPromoPost(){
+        Product product1 = new Product(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1, 1, 223.3, true, 0.25);
+        User seller = new User(1, "JuanPerez");
+        seller.getPosts().add(post1);
+
+        return seller;
+    }
+
     public static List<User> getUsersListTestT0003() {
 
         List<User> usersList;

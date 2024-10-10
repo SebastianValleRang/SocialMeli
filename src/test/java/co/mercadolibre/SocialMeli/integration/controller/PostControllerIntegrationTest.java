@@ -3,6 +3,7 @@ package co.mercadolibre.SocialMeli.integration.controller;
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
 import co.mercadolibre.SocialMeli.dto.response.RecentPostDTO;
+import co.mercadolibre.SocialMeli.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
