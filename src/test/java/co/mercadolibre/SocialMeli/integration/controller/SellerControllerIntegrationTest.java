@@ -1,11 +1,15 @@
 package co.mercadolibre.SocialMeli.integration.controller;
 
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
+import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
+import co.mercadolibre.SocialMeli.entity.User;
+import co.mercadolibre.SocialMeli.util.Data;
 import co.mercadolibre.SocialMeli.util.IntegrationData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +19,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +43,7 @@ public class SellerControllerIntegrationTest {
 
         int userId = 1;
 
-        MvcResult response = this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list",userId))
+        MvcResult response = this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list", userId))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
@@ -50,12 +59,11 @@ public class SellerControllerIntegrationTest {
 
         int userId = 10;
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list",userId))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list", userId))
                 .andDo(print()).andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
                         .value("El usuario con el id %d no se ha encontrado".formatted(userId)));
-
     }
 
     @Test
@@ -64,12 +72,52 @@ public class SellerControllerIntegrationTest {
 
         int userId = 2;
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list",userId))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/list", userId))
                 .andDo(print()).andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
                         .value("El usuario con el id %d no es un vendedor".formatted(userId)));
 
+    }
+
+    @Nested
+    class CountFollowersT0007 {
+        @DisplayName("T-0007: Contar seguidores")
+        @Test
+        void countFollowersOkTest() throws Exception{
+
+            int userId = 1;
+
+            MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/count", userId))
+                    .andDo(print()).andExpect(status().isOk())
+                    .andExpect(content().contentType("application/json"))
+                    .andReturn();
+
+            CountFollowersDTO countSellerResponse = objectMapper.readValue(response.getResponse().getContentAsString(), CountFollowersDTO.class);
+            Assertions.assertEquals(IntegrationData.getCountSellerDTO(), countSellerResponse);
+        }
+        @DisplayName("T-0007: No se encuentra el usuario")
+        @Test
+        void countFollowersNotUserFoundTest() throws Exception{
+            int userId = 10;
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/count", userId))
+                    .andDo(print()).andExpect(status().isNotFound())
+                    .andExpect(content().contentType("application/json"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message")
+                            .value("El usuario con el id %d no se ha encontrado".formatted(userId)));
+        }
+        @DisplayName("T-0007: El usuario no es vendedor")
+        @Test
+        void countFollowersNotSellerTest() throws Exception {
+            int userId = 2;
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/users/{userId}/followers/count", userId))
+                    .andDo(print()).andExpect(status().isNotFound())
+                    .andExpect(content().contentType("application/json"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message")
+                            .value("El usuario con el id %d no es un vendedor".formatted(userId)));
+        }
     }
 
 }
