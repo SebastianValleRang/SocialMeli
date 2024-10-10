@@ -1,5 +1,6 @@
 package co.mercadolibre.SocialMeli.unit.service;
 
+import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.ExceptionDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.entity.User;
@@ -39,53 +40,55 @@ public class SellerServiceTest {
     SellerService sellerService;
 
     @Nested
-    class userOrderListT0004{
+    class UserOrderListT0004 {
         @DisplayName("T-0004: Listar seguidores por orden ascendente")
         @Test
-        public void listFollowersTestOrderAsc(){
+        void listFollowersTestOrderAsc() {
             //Arrange
             int userId = 1;
             String order = "name_asc";
             List<User> usersList = Data.getUsersListTest(); //traer datos precargados
-            User userSeller = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
+            User userSeller = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
             SellerFollowersDTO expectedListFollowers = Data.getlistFollowersAscTest(); //traer lista ordenada
 
             //Act
             when(usersRepository.findAllUsers()).thenReturn(usersList);
             when(globalMethods.getUserById(userId)).thenReturn(userSeller);
-            SellerFollowersDTO listFollowersByOrderAsc = sellerService.listFollowers(userId,order);
+            SellerFollowersDTO listFollowersByOrderAsc = sellerService.listFollowers(userId, order);
 
             //Assert
-            assertEquals(expectedListFollowers,listFollowersByOrderAsc);
+            assertEquals(expectedListFollowers, listFollowersByOrderAsc);
             verify(usersRepository).findAllUsers();
         }
+
         @DisplayName("T-0004: Listar seguidores por orden descendente")
         @Test
-        public void listFollowersTestOrderDesc(){
+        void listFollowersTestOrderDesc() {
             //Arrange
             int userId = 1;
             String order = "name_desc";
             List<User> usersList = Data.getUsersListTest(); //traer datos precargados
-            User userSeller = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
+            User userSeller = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
             SellerFollowersDTO expectedListFollowers = Data.getlistFollowersDescTest(); //traer lista ordenada
 
             //Act
             when(usersRepository.findAllUsers()).thenReturn(usersList);
             when(globalMethods.getUserById(userId)).thenReturn(userSeller);
-            SellerFollowersDTO listFollowersByOrderDesc = sellerService.listFollowers(userId,order);
+            SellerFollowersDTO listFollowersByOrderDesc = sellerService.listFollowers(userId, order);
 
             //Assert
-            assertEquals(expectedListFollowers,listFollowersByOrderDesc);
+            assertEquals(expectedListFollowers, listFollowersByOrderDesc);
             verify(usersRepository).findAllUsers();
         }
+
         @DisplayName("T-0004: Orden invalido")
         @Test
-        public void listFollowersTestOrderInvalid(){
+        void listFollowersTestOrderInvalid() {
             //Arrange
             int userId = 1;
             String order = "name";
             List<User> usersList = Data.getUsersListTest(); //traer datos precargados
-            User userSeller = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
+            User userSeller = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
             ExceptionDTO expectedResponse = new ExceptionDTO("Ordenamiento inválido", HttpStatus.BAD_REQUEST);
 
             //Act
@@ -93,7 +96,7 @@ public class SellerServiceTest {
             when(globalMethods.getUserById(userId)).thenReturn(userSeller);
 
             //Assert
-            BadRequestException badRequestException = assertThrows(BadRequestException.class, ()->sellerService.listFollowers(userId,order));
+            BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> sellerService.listFollowers(userId, order));
             assertTrue(badRequestException.getMessage().contains(expectedResponse.getMessage()));
             verify(usersRepository).findAllUsers();
         }
@@ -101,16 +104,99 @@ public class SellerServiceTest {
     }
 
     @Nested
-    class T0003{
+    class CountFollowersT0007 {
+        @DisplayName("T-0007: Contar seguidores")
+        @Test
+        void countFollowersOkTest() {
+            //Arrange
+            int userId = 1;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
+            CountFollowersDTO expectedCount = Data.getCountFollowers(); //traer el número de seguidores
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+            CountFollowersDTO countFollowers = sellerService.countFollowers(userId);
+
+            //Assert
+            assertEquals(expectedCount, countFollowers);
+            verify(usersRepository).findAllUsers();
+
+        }
+
+        @DisplayName("T-0007: No se encuentra el usuario")
+        @Test
+        void countFollowersNotUserFoundTest() {
+            //Arrange
+            int userId = 8;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = null; //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("El usuario con el id 8 no se ha encontrado", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods, never()).isNotSeller(any(User.class));
+        }
+
+        @DisplayName("T-0007: El usuario no es vendedor")
+        @Test
+        void countFollowersNotSellerTest() {
+            //Arrange
+            int userId = 5;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null); //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("El usuario con el id 5 no es un vendedor", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.isNotSeller(userSeller)).thenReturn(true);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods).isNotSeller(any(User.class));
+        }
+
+        @DisplayName("T-0007: No hay usuarios registrados")
+        @Test
+        void countFollowersNotUsersTest() {
+            //Arrange
+            int userId = 1;
+            List<User> usersList = new ArrayList<>(); //traer datos precargados
+            User userSeller = null; //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("No hay usuarios registrados", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods, never()).isNotSeller(any(User.class));
+        }
+    }
+
+    @Nested
+    class T0003 {
         @DisplayName("Ordenar seguidores - Camino Bueno")
         @Test
-        void orderingFollowersGood(){
+        void orderingFollowersGood() {
 
             //Arrange
             int userId = 1;
             String order = null;
             List<User> usersList = Data.getUsersListTestT0003();
-            User userById = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null);
+            User userById = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null);
 
             SellerFollowersDTO expectedJson = Data.getlistFollowersSellersTest();
 
@@ -123,7 +209,7 @@ public class SellerServiceTest {
             SellerFollowersDTO serviceResponse = sellerService.listFollowers(userId, order);
 
             //Assert
-            Assertions.assertEquals(expectedJson,serviceResponse);
+            Assertions.assertEquals(expectedJson, serviceResponse);
             verify(globalMethods).getUserById(anyInt());
             verify(globalMethods).isNotSeller(any(User.class));
 
@@ -131,7 +217,7 @@ public class SellerServiceTest {
 
         @DisplayName("Ordenar seguidores - Camino Malo, no hay ususarios")
         @Test
-        void orderingFollowersBadUsers(){
+        void orderingFollowersBadUsers() {
 
             //Arrange
             int userId = 1;
@@ -146,7 +232,7 @@ public class SellerServiceTest {
                 sellerService.listFollowers(userId, order);
             });
 
-            Assertions.assertEquals("No hay usuarios registrados" , notFoundException.getMessage());
+            Assertions.assertEquals("No hay usuarios registrados", notFoundException.getMessage());
             verify(globalMethods, never()).getUserById(anyInt());
             verify(globalMethods, never()).isNotSeller(any(User.class));
 
@@ -154,7 +240,7 @@ public class SellerServiceTest {
 
         @DisplayName("Ordenar seguidores - Camino Malo, no encuentra al vendedor")
         @Test
-        void orderingFollowersBadSeller(){
+        void orderingFollowersBadSeller() {
 
             //Arrange
             int userId = 1;
@@ -170,7 +256,7 @@ public class SellerServiceTest {
                 sellerService.listFollowers(userId, order);
             });
 
-            Assertions.assertEquals("El usuario con el id %d no se ha encontrado".formatted(userId) , notFoundException.getMessage());
+            Assertions.assertEquals("El usuario con el id %d no se ha encontrado".formatted(userId), notFoundException.getMessage());
             verify(globalMethods).getUserById(anyInt());
             verify(globalMethods, never()).isNotSeller(any(User.class));
 
@@ -178,13 +264,13 @@ public class SellerServiceTest {
 
         @DisplayName("Ordenar seguidores - Camino Malo, el usuario no es vendedor")
         @Test
-        void orderingFollowersBadFindUser(){
+        void orderingFollowersBadFindUser() {
 
             //Arrange
             int userId = 1;
             String order = null;
             List<User> usersList = Data.getUsersListTestT0003();
-            User userById = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null);
+            User userById = usersList.stream().filter(u -> u.getUserId() == userId).findFirst().orElse(null);
 
             //Act & Assert
             when(usersRepository.findAllUsers()).thenReturn(usersList);
@@ -195,7 +281,7 @@ public class SellerServiceTest {
                 sellerService.listFollowers(userId, order);
             });
 
-            Assertions.assertEquals("El usuario con el id %d no es un vendedor".formatted(userId) , notFoundException.getMessage());
+            Assertions.assertEquals("El usuario con el id %d no es un vendedor".formatted(userId), notFoundException.getMessage());
             verify(globalMethods).getUserById(anyInt());
             verify(globalMethods).isNotSeller(any(User.class));
 

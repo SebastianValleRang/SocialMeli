@@ -33,8 +33,9 @@ public class UserControllerIntegrationTest {
     MockMvc mockMvc;
 
     ObjectMapper objectMapper = new ObjectMapper();
+
     @Nested
-    class FollowUser{
+    class FollowUser {
         @DisplayName("T0001: Follow user ok")
         @Test
         void followUserOkTest() throws Exception {
@@ -72,7 +73,6 @@ public class UserControllerIntegrationTest {
         }
 
     }
-
 
 
     @Test

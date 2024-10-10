@@ -55,14 +55,15 @@ public class PostControllerIntegrationTest {
         }
 
     }
+
     @Nested
-    class withFilterOrder{
+    class withFilterOrder {
 
         @DisplayName("TI0006: Muestra unicamente los post de las últimas 2 semanas ordenados según el parámetro de la url")
         @Test
-        void postWithOrder() throws Exception{
-            ProductDTO product = new ProductDTO(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
-            RecentPostDTO responseDTO = new RecentPostDTO(2, List.of(new PostResponseDTO(1, 1, LocalDate.parse("2024-10-03"),product,1,223.3)));
+        void postWithOrder() throws Exception {
+            ProductDTO product = new ProductDTO(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+            RecentPostDTO responseDTO = new RecentPostDTO(2, List.of(new PostResponseDTO(1, 1, LocalDate.parse("2024-10-03"), product, 1, 223.3)));
 
             ObjectWriter writer = new ObjectMapper()
                     .registerModule(new JavaTimeModule())
@@ -72,7 +73,7 @@ public class PostControllerIntegrationTest {
             String responseJson = writer.writeValueAsString(responseDTO);
 
             MvcResult result = mockMvc.perform(get("/products/followed/2/list?order=date_desc")
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 

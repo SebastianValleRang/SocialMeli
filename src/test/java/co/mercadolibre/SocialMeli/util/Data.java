@@ -1,11 +1,8 @@
 package co.mercadolibre.SocialMeli.util;
 
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
-import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
-import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
-import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
+import co.mercadolibre.SocialMeli.dto.response.*;
 
-import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
@@ -55,7 +52,7 @@ public class Data {
                 userJuanPerez.getUserId(),
                 userJuanPerez.getUserName(),
                 List.of(objectMapper.convertValue(userFedericoV, UserDTO.class)
-                        ,objectMapper.convertValue(userAnita99,UserDTO.class))
+                        , objectMapper.convertValue(userAnita99, UserDTO.class))
         );
 
         return clientFollowedDTO;
@@ -74,29 +71,29 @@ public class Data {
         SellerFollowersDTO sellerFollowersDTO = new SellerFollowersDTO(
                 userJuanPerez.getUserId(),
                 userJuanPerez.getUserName(),
-                List.of(objectMapper.convertValue(userLeandroDiaz,UserDTO.class)
-                        ,objectMapper.convertValue(userAngelaGonzales,UserDTO.class))
+                List.of(objectMapper.convertValue(userLeandroDiaz, UserDTO.class)
+                        , objectMapper.convertValue(userAngelaGonzales, UserDTO.class))
         );
 
         return sellerFollowersDTO;
 
     }
 
-    public static List<User> getUsersListTest(){
+    public static List<User> getUsersListTest() {
         //Usuarios
-        User userLeandroRamirez = new User(1,"LeandroRamirez");
-        User userVaneLozano = new User(2,"VaneLozano");
-        User userAngelaDaza = new User(3,"AngelaDaza");
-        User userAnaGarcia = new User(4,"AnaGarcia");
-        User userSebasVallejo = new User(5,"SebasVallejo");
+        User userLeandroRamirez = new User(1, "LeandroRamirez");
+        User userVaneLozano = new User(2, "VaneLozano");
+        User userAngelaDaza = new User(3, "AngelaDaza");
+        User userAnaGarcia = new User(4, "AnaGarcia");
+        User userSebasVallejo = new User(5, "SebasVallejo");
 
         //productos
-        Product product1 = new Product(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
-        Product product2 = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
-        Product product3 = new Product(3,"Nevera","Cocina","Samsung","Blanco","Con congelador");
+        Product product1 = new Product(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+        Product product2 = new Product(2, "Licuadora", "Cocina", "Imusa", "Negro", "Gomela");
+        Product product3 = new Product(3, "Nevera", "Cocina", "Samsung", "Blanco", "Con congelador");
 
         //posts
-        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1,1,223.3);
+        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1, 1, 223.3);
         Post post2 = new Post(2, 2, LocalDate.parse("2024-10-07"), product2, 2, 150.5);
         Post post3 = new Post(3, 2, LocalDate.parse("2024-10-01"), product3, 2, 525.0);
 
@@ -117,30 +114,23 @@ public class Data {
         userAnaGarcia.getFollowed().add(userAngelaDaza);
         userAnaGarcia.getFollowed().add(userVaneLozano);
 
-        return List.of(userLeandroRamirez,userVaneLozano,userAngelaDaza,userAnaGarcia,userSebasVallejo);
+        return List.of(userLeandroRamirez, userVaneLozano, userAngelaDaza, userAnaGarcia, userSebasVallejo);
     }
 
-    public static SellerFollowersDTO getlistFollowersTest(){
-        List<User> users = getUsersListTest();
-        List<UserDTO> sellerFollowers = users.getFirst().getFollowers().stream()
-                .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
-                .toList();
-        return new SellerFollowersDTO(users.getFirst().getUserId(), users.getFirst().getUserName(), sellerFollowers);
-    }
-
-    public static SellerFollowersDTO getlistFollowersAscTest(){
-        List<UserDTO> sellerFollowers = List.of(new UserDTO(4,"AnaGarcia"),new UserDTO(5, "SebasVallejo"),new UserDTO(2,"VaneLozano"));
+    public static SellerFollowersDTO getlistFollowersAscTest() {
+        List<UserDTO> sellerFollowers = List.of(new UserDTO(4, "AnaGarcia"), new UserDTO(5, "SebasVallejo"), new UserDTO(2, "VaneLozano"));
         return new SellerFollowersDTO(1, "LeandroRamirez", sellerFollowers);
     }
 
-    public static SellerFollowersDTO getlistFollowersDescTest(){
+    public static SellerFollowersDTO getlistFollowersDescTest() {
         List<User> users = getUsersListTest();
         List<UserDTO> sellerFollowers = users.getFirst().getFollowers().stream()
                 .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
                 .toList();
         return new SellerFollowersDTO(users.getFirst().getUserId(), users.getFirst().getUserName(), sellerFollowers.stream().sorted(Comparator.comparing(UserDTO::getUserName).reversed()).toList());
     }
-    public static ClientFollowedDTO getlistFollowedAscTest(){
+
+    public static ClientFollowedDTO getlistFollowedAscTest() {
         List<User> users = getUsersListTest();
         List<UserDTO> userFollowed = users.get(3).getFollowed().stream()
                 .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
@@ -148,7 +138,7 @@ public class Data {
         return new ClientFollowedDTO(users.get(3).getUserId(), users.get(3).getUserName(), userFollowed.stream().sorted(Comparator.comparing(UserDTO::getUserName)).toList());
     }
 
-    public static ClientFollowedDTO getlistFollowedDescTest(){
+    public static ClientFollowedDTO getlistFollowedDescTest() {
         List<User> users = getUsersListTest();
         List<UserDTO> userFollowed = users.get(3).getFollowed().stream()
                 .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
@@ -156,15 +146,19 @@ public class Data {
         return new ClientFollowedDTO(users.get(3).getUserId(), users.get(3).getUserName(), userFollowed.stream().sorted(Comparator.comparing(UserDTO::getUserName).reversed()).toList());
     }
 
-    public static User getUserThatFollows1Seller(){
+    public static CountFollowersDTO getCountFollowers() {
+        return new CountFollowersDTO(1, "LeandroRamirez", 3);
+    }
+
+    public static User getUserThatFollows1Seller() {
         User client = new User(1, "Cliente");
 
-        Product product1 = new Product(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
-        Product product2 = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
-        Product product3 = new Product(3,"Nevera","Cocina","Samsung","Blanco","Con congelador");
+        Product product1 = new Product(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+        Product product2 = new Product(2, "Licuadora", "Cocina", "Imusa", "Negro", "Gomela");
+        Product product3 = new Product(3, "Nevera", "Cocina", "Samsung", "Blanco", "Con congelador");
 
         User seller = new User(2, "Vendedor1");
-        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-09"), product1,1,223.3);
+        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-09"), product1, 1, 223.3);
         Post post2 = new Post(2, 2, LocalDate.parse("2024-09-23"), product2, 2, 150.5);
         Post post3 = new Post(3, 2, LocalDate.parse("2023-01-01"), product3, 2, 525.0);
 
@@ -178,30 +172,34 @@ public class Data {
         return client;
     }
 
-    public static User createUser(int id, String userName){
-        return new User(id, userName, new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
+    public static User createUser(int id, String userName) {
+        return new User(id, userName, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
-    public static User createSeller(int id, String userName){
+
+    public static User createSeller(int id, String userName) {
         List<Post> posts = new ArrayList<>();
-        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
-        posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
+        Product product = new Product(2, "Licuadora", "Cocina", "Imusa", "Negro", "Gomela");
+        posts.add(new Post(1, id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
     }
-    public static User createSellerWithDate(int id, String userName, LocalDate date){
+
+    public static User createSellerWithDate(int id, String userName, LocalDate date) {
         List<Post> posts = new ArrayList<>();
-        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
-        posts.add(new Post(1,id, date, product, 100, 150.000));
+        Product product = new Product(2, "Licuadora", "Cocina", "Imusa", "Negro", "Gomela");
+        posts.add(new Post(1, id, date, product, 100, 150.000));
         return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
     }
-    public static User createFollowedSeller(int id, String userName, User follower){
+
+    public static User createFollowedSeller(int id, String userName, User follower) {
         List<User> followers = new ArrayList<>();
         followers.add(follower);
         List<Post> posts = new ArrayList<>();
-        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
-        posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
+        Product product = new Product(2, "Licuadora", "Cocina", "Imusa", "Negro", "Gomela");
+        posts.add(new Post(1, id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, followers, new ArrayList<>(), posts);
     }
-    public static PostResponseDTO convertPostToPostResponseDTO(Post post){
+
+    public static PostResponseDTO convertPostToPostResponseDTO(Post post) {
         Product product = post.getProduct();
         return new PostResponseDTO(
                 post.getUserId(),
