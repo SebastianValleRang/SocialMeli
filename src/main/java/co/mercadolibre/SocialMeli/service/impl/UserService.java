@@ -40,7 +40,7 @@ public class UserService implements IUserService {
             throw new NotFoundException("No existe un usuario con el id %d.".formatted(userId));
         }
         if (seller == null){
-            throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
+        throw new NotFoundException("No existe un vendedor con el id %d.".formatted(userIdToFollow));
         }
 
         //Validacion vendedor
@@ -88,7 +88,7 @@ public class UserService implements IUserService {
         } else if (order != null && order.equals("name_desc")){
             return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers.stream().sorted(Comparator.comparing(UserDTO::getUserName).reversed()).toList());
         } else if(order != null){
-            throw new BadRequestException("Ordenamiento invalido");
+            throw new BadRequestException("Ordenamiento inválido");
         }
 
         return new ClientFollowedDTO(user.getUserId(),user.getUserName(), followedSellers);

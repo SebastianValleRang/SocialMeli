@@ -41,14 +41,16 @@ public class UsersRepository implements IUsersRepository {
         usersList.add(userAnita99);
         usersList.add(userFedericoV);
 
-        Product sillaGamer = iProductRepository.findAllProducts().stream()
+        Product mesedora = iProductRepository.findAllProducts().stream()
                 .filter(p->p.getProductId()==1).findFirst().orElse(null);
 
         Product almohadaDeChayanne = iProductRepository.findAllProducts().stream()
                 .filter(p -> p.getProductId() == 4).findFirst().orElse(null);
 
-        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.parse("2024-09-22"),sillaGamer,1,223.3));
-        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.now(),almohadaDeChayanne,2,227.7));
+        userJuanPerez.getPosts().add(new Post(1, userJuanPerez.getUserId(), LocalDate.parse("2024-10-03"),mesedora,1,223.3));
+        userJuanPerez.getPosts().add(new Post(2, userJuanPerez.getUserId(), LocalDate.parse("2024-09-22"),almohadaDeChayanne,2,227.7));
+
+        userLeandroDiaz.getFollowed().add(userJuanPerez);
 
     }
 
