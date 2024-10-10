@@ -1,6 +1,7 @@
 package co.mercadolibre.SocialMeli.unit.service;
 
 import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
+import co.mercadolibre.SocialMeli.dto.response.CountPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.ExceptionDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.entity.User;
@@ -10,6 +11,10 @@ import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.impl.SellerService;
 import co.mercadolibre.SocialMeli.util.Data;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -40,10 +45,10 @@ public class SellerServiceTest {
     SellerService sellerService;
 
     @Nested
-    class UserOrderListT0004 {
+    class userOrderListT0004 {
         @DisplayName("T-0004: Listar seguidores por orden ascendente")
         @Test
-        void listFollowersTestOrderAsc() {
+        public void listFollowersTestOrderAsc() {
             //Arrange
             int userId = 1;
             String order = "name_asc";
@@ -63,7 +68,7 @@ public class SellerServiceTest {
 
         @DisplayName("T-0004: Listar seguidores por orden descendente")
         @Test
-        void listFollowersTestOrderDesc() {
+        public void listFollowersTestOrderDesc() {
             //Arrange
             int userId = 1;
             String order = "name_desc";
@@ -83,7 +88,7 @@ public class SellerServiceTest {
 
         @DisplayName("T-0004: Orden invalido")
         @Test
-        void listFollowersTestOrderInvalid() {
+        public void listFollowersTestOrderInvalid() {
             //Arrange
             int userId = 1;
             String order = "name";
@@ -287,6 +292,52 @@ public class SellerServiceTest {
 
         }
 
+    }
+
+    @Nested
+    class Bonus {
+        @Test
+        @DisplayName("Lista vendedores mas activos - Camino bueno")
+        public void listMostActiveSellersGoodTest() throws Exception {
+
+            //Arrange
+            List<User> usersList = Data.getUsersListTest();
+
+            String expectedJson = "[{\"user_id\":3,\"user_name\":\"AngelaDaza\",\"post_count\":1},{\"user_id\":2,\"user_name\":\"VaneLozano\",\"post_count\":1},{\"user_id\":1,\"user_name\":\"LeandroRamirez\",\"post_count\":1}]";
+            ObjectWriter writer = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .configure(SerializationFeature.WRAP_ROOT_VALUE, false)
+                    .writer();
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+
+            List<CountPostDTO> serviceResponse = sellerService.listMostActiveSellers();
+            String responseJson = writer.writeValueAsString(serviceResponse);
+
+            //Assert
+            Assertions.assertEquals(expectedJson, responseJson);
+
+        }
+
+        @Test
+        @DisplayName("Lista vendedores mas activos - Camino bueno")
+        public void listMostActiveSellersNoUsersTest() throws Exception {
+
+            //Arrange
+            List<User> usersList = new ArrayList<>();
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+
+            NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> {
+                sellerService.listMostActiveSellers();
+            });
+
+            //Assert
+            Assertions.assertEquals("No hay usuarios registrados.", notFoundException.getMessage());
+
+        }
     }
 
 }

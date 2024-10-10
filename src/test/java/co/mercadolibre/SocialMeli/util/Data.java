@@ -39,6 +39,29 @@ public class Data {
 
     }
 
+    public static List<User> getUsersListTestBonus() {
+
+        List<User> usersList;
+
+        User userJuanPerez = new User(1, "JuanPerez");
+        User userLeandroDiaz = new User(2, "LeandroDiaz");
+        User userAngelaGonzales = new User(3, "AngelaGonzales");
+        User userAnita99 = new User(4, "Anita99");
+        User userFedericoV = new User(5, "FedericoV");
+
+        usersList = List.of(userJuanPerez, userLeandroDiaz, userAngelaGonzales,
+                userAnita99, userFedericoV);
+
+        userJuanPerez.getFollowers().add(userLeandroDiaz);
+        userJuanPerez.getFollowers().add(userAngelaGonzales);
+
+        userJuanPerez.getFollowed().add(userFedericoV);
+        userJuanPerez.getFollowed().add(userAnita99);
+
+        return usersList;
+
+    }
+
     public static ClientFollowedDTO getlistFollowedSellersTest() {
 
         User userJuanPerez = new User(1, "JuanPerez");
