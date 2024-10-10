@@ -95,8 +95,8 @@ public class Data {
 
         //posts
         Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1,1,223.3);
-        Post post2 = new Post(2, 2, LocalDate.parse("2024-09-23"), product2, 2, 150.5);
-        Post post3 = new Post(3, 2, LocalDate.parse("2023-01-01"), product3, 2, 525.0);
+        Post post2 = new Post(2, 2, LocalDate.parse("2024-10-07"), product2, 2, 150.5);
+        Post post3 = new Post(3, 2, LocalDate.parse("2024-10-01"), product3, 2, 525.0);
 
         //Vendedores
         userLeandroRamirez.getPosts().add(post1);

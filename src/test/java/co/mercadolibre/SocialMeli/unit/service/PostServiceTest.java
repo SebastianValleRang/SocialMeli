@@ -25,9 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,51 +50,50 @@ public class PostServiceTest {
         @Test
         void getPostsByFollowedUsersLastTwoWeeksOkTest(){
             //Arrange
-            User userUno = Data.createUser(1,"Fernanda");
-            User sellerUno = Data.createSellerWithDate(2,"Pedro", LocalDate.now());
-            User sellerDos = Data.createSellerWithDate(2,"Alvaro", LocalDate.of(2024, 10, 05));
-            List<User> followedList = Arrays.asList(sellerUno, sellerDos);
-            userUno.setFollowed(followedList);
-
-            List<Post> aux = sellerUno.getPosts();
-            List<PostResponseDTO> auxPost = aux.stream()
+            List<User> userList = Data.getUsersListTest();
+            User user = userList.stream()
+                    .filter(u -> u.getUserId() == 4)
+                    .findFirst()
+                    .orElse(null);
+            List<PostResponseDTO> posts = user.getFollowed().stream()
+                    .flatMap(p -> p.getPosts().stream())
                     .map(post -> {
-                                Product product = post.getProduct();
-                                return new PostResponseDTO(
-                                        post.getUserId(),
-                                        post.getPostId(),
-                                        post.getDate(),
-                                        new ProductDTO(
-                                                product.getProductId(),
-                                                product.getProductName(),
-                                                product.getType(),
-                                                product.getBrand(),
-                                                product.getColor(),
-                                                product.getNotes()
-                                        ),
-                                        post.getCategory(),
-                                        post.getPrice()
-                                );
-                            }
-                    )
-                    .collect(Collectors.toList());
+                        Product product = post.getProduct();
+                        return new PostResponseDTO(
+                                post.getUserId(),
+                                post.getPostId(),
+                                post.getDate(),
+                                new ProductDTO(
+                                        product.getProductId(),
+                                        product.getProductName(),
+                                        product.getType(),
+                                        product.getBrand(),
+                                        product.getColor(),
+                                        product.getNotes()
+                                ),
+                                post.getCategory(),
+                                post.getPrice()
+                        );
+                    }).collect(Collectors.toList());
 
-            auxPost.addAll(auxPost);
-            RecentPostDTO expectedResponse = new RecentPostDTO(
-                    userUno.getUserId(),
-                    auxPost
+            posts.sort(Comparator.comparing(PostResponseDTO::getDate));
+            RecentPostDTO mockOutDTO = new RecentPostDTO(
+                    4,
+                    posts
             );
 
             //Simulation
-            when(iUsersRepository.findAllUsers()).thenReturn(List.of(userUno,sellerUno, sellerDos));
-            when(globalMethods.getUserById(1)).thenReturn(userUno);
-            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class))).thenReturn(expectedResponse.getRecentPosts().get(0));
-
+            when(iUsersRepository.findAllUsers()).thenReturn(userList);
+            when(globalMethods.getUserById(4)).thenReturn(user);
+            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class)))
+                    .thenReturn(posts.get(0))
+                    .thenReturn(posts.get(1))
+                    .thenReturn(posts.get(2));
             //Act
-            RecentPostDTO realResponse = postService.getPostsByFollowedUsersLastTwoWeeks(1,"date_asc");
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_asc");
 
             //Assert
-            assertEquals(expectedResponse,realResponse);
+            assertEquals(mockOutDTO,obtained);
             verify(iUsersRepository).findAllUsers();
             verify(globalMethods, times(2)).getUserById(anyInt());
         }
@@ -106,44 +103,49 @@ public class PostServiceTest {
         void getPostsByFollowedUsersLastTwoWeeksNoOrderTest(){
 
             //Arrange
-            User userUno = Data.createUser(1,"Fernanda");
-            User sellerUno = Data.createSellerWithDate(2,"Pedro", LocalDate.now());
-            User sellerDos = Data.createSellerWithDate(2,"Alvaro", LocalDate.of(2024, 10, 05));
-            List<User> followedList = Arrays.asList(sellerUno, sellerDos);
-            userUno.setFollowed(followedList);
             ResponseDTO expectedResponse = new ResponseDTO("Orden no válido.",HttpStatus.BAD_REQUEST);
-
-            List<Post> aux = sellerUno.getPosts();
-            List<PostResponseDTO> auxPost = aux.stream()
+            List<User> userList = Data.getUsersListTest();
+            User user = userList.stream()
+                    .filter(u -> u.getUserId() == 4)
+                    .findFirst()
+                    .orElse(null);
+            List<PostResponseDTO> posts = user.getFollowed().stream()
+                    .flatMap(p -> p.getPosts().stream())
                     .map(post -> {
-                                Product product = post.getProduct();
-                                return new PostResponseDTO(
-                                        post.getUserId(),
-                                        post.getPostId(),
-                                        post.getDate(),
-                                        new ProductDTO(
-                                                product.getProductId(),
-                                                product.getProductName(),
-                                                product.getType(),
-                                                product.getBrand(),
-                                                product.getColor(),
-                                                product.getNotes()
-                                        ),
-                                        post.getCategory(),
-                                        post.getPrice()
-                                );
-                            }
-                    )
-                    .collect(Collectors.toList());
+                        Product product = post.getProduct();
+                        return new PostResponseDTO(
+                                post.getUserId(),
+                                post.getPostId(),
+                                post.getDate(),
+                                new ProductDTO(
+                                        product.getProductId(),
+                                        product.getProductName(),
+                                        product.getType(),
+                                        product.getBrand(),
+                                        product.getColor(),
+                                        product.getNotes()
+                                ),
+                                post.getCategory(),
+                                post.getPrice()
+                        );
+                    }).collect(Collectors.toList());
+
+            posts.sort(Comparator.comparing(PostResponseDTO::getDate));
+            RecentPostDTO mockOutDTO = new RecentPostDTO(
+                    4,
+                    posts
+            );
 
             //Simulation
-            when(iUsersRepository.findAllUsers()).thenReturn(List.of(userUno,sellerUno, sellerDos));
-            when(globalMethods.getUserById(1)).thenReturn(userUno);
-            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class))).thenReturn(auxPost.get(0));
-            //when(userUno.getFollowed()).thenReturn(followedList);
+            when(iUsersRepository.findAllUsers()).thenReturn(userList);
+            when(globalMethods.getUserById(4)).thenReturn(user);
+            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class)))
+                    .thenReturn(posts.get(0))
+                    .thenReturn(posts.get(1))
+                    .thenReturn(posts.get(2));
 
             //Act & Assert
-            BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> postService.getPostsByFollowedUsersLastTwoWeeks(1,"prueba"));
+            BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> postService.getPostsByFollowedUsersLastTwoWeeks(4,"prueba"));
             assertTrue(badRequestException.getMessage().contains(expectedResponse.getMessage()));
             verify(iUsersRepository).findAllUsers();
             verify(globalMethods, times(2)).getUserById(anyInt());
@@ -198,6 +200,114 @@ public class PostServiceTest {
             Assertions.assertEquals(clientId, found.getUserId());
             Assertions.assertEquals(1, found.getRecentPosts().size());
             Assertions.assertEquals(expectedPosts, found.getRecentPosts());
+        }
+    }
+
+
+    @Nested
+    class OrderListFollowed{
+        @DisplayName("T-0006: Posts by Followed Users Last Two Weeks Order ASC Ok")
+        @Test
+        void getPostsByASCTestOk(){
+            //Arrange
+            List<User> userList = Data.getUsersListTest();
+            User user = userList.stream()
+                    .filter(u -> u.getUserId() == 4)
+                            .findFirst()
+                                    .orElse(null);
+            List<PostResponseDTO> posts = user.getFollowed().stream()
+                    .flatMap(p -> p.getPosts().stream())
+                    .map(post -> {
+                                    Product product = post.getProduct();
+                                    return new PostResponseDTO(
+                                            post.getUserId(),
+                                            post.getPostId(),
+                                            post.getDate(),
+                                            new ProductDTO(
+                                                    product.getProductId(),
+                                                    product.getProductName(),
+                                                    product.getType(),
+                                                    product.getBrand(),
+                                                    product.getColor(),
+                                                    product.getNotes()
+                                            ),
+                                            post.getCategory(),
+                                            post.getPrice()
+                                    );
+                    }).collect(Collectors.toList());
+
+            posts.sort(Comparator.comparing(PostResponseDTO::getDate));
+            RecentPostDTO mockOutDTO = new RecentPostDTO(
+                    4,
+                    posts
+            );
+            //Simulation
+            when(iUsersRepository.findAllUsers()).thenReturn(userList);
+            when(globalMethods.getUserById(4)).thenReturn(user);
+            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class)))
+                    .thenReturn(posts.get(0))
+                    .thenReturn(posts.get(1))
+                    .thenReturn(posts.get(2));
+
+            //Act
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_asc");
+
+            //Assert
+            assertEquals(mockOutDTO, obtained);
+            verify(iUsersRepository).findAllUsers();
+            verify(globalMethods, times(2)).getUserById(anyInt());
+        }
+
+        @DisplayName("T-0006: Posts by Followed Users Last Two Weeks Order DESC Ok")
+        @Test
+        void getPostsByDESCTestOk(){
+            //Arrange
+            List<User> userList = Data.getUsersListTest();
+            User user = userList.stream()
+                    .filter(u -> u.getUserId() == 4)
+                    .findFirst()
+                    .orElse(null);
+            List<PostResponseDTO> posts = user.getFollowed().stream()
+                    .flatMap(p -> p.getPosts().stream())
+                    .map(post -> {
+                        Product product = post.getProduct();
+                        return new PostResponseDTO(
+                                post.getUserId(),
+                                post.getPostId(),
+                                post.getDate(),
+                                new ProductDTO(
+                                        product.getProductId(),
+                                        product.getProductName(),
+                                        product.getType(),
+                                        product.getBrand(),
+                                        product.getColor(),
+                                        product.getNotes()
+                                ),
+                                post.getCategory(),
+                                post.getPrice()
+                        );
+                    }).collect(Collectors.toList());
+
+            posts.sort(Comparator.comparing(PostResponseDTO::getDate).reversed());
+            RecentPostDTO mockOutDTO = new RecentPostDTO(
+                    4,
+                    posts
+            );
+            //Simulation
+            when(iUsersRepository.findAllUsers()).thenReturn(userList);
+            when(globalMethods.getUserById(4)).thenReturn(user);
+            when(mapper.convertValue(any(Post.class), eq(PostResponseDTO.class)))
+                    .thenReturn(posts.get(0))
+                    .thenReturn(posts.get(1))
+                    .thenReturn(posts.get(2));
+
+            //Act
+            RecentPostDTO obtained = postService.getPostsByFollowedUsersLastTwoWeeks(4,"date_desc");
+
+            //Assert
+            assertEquals(mockOutDTO, obtained);
+            verify(iUsersRepository).findAllUsers();
+            verify(globalMethods, times(2)).getUserById(anyInt());
         }
     }
 }
