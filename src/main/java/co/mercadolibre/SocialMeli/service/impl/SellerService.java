@@ -9,7 +9,7 @@ import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.exception.BadRequestException;
 import co.mercadolibre.SocialMeli.exception.NotFoundException;
-import co.mercadolibre.SocialMeli.repository.impl.UsersRepository;
+import co.mercadolibre.SocialMeli.repository.IUsersRepository;
 import co.mercadolibre.SocialMeli.service.ISellerService;
 import co.mercadolibre.SocialMeli.utils.GlobalMethods;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,14 +24,15 @@ import java.util.List;
 @Service
 public class SellerService implements ISellerService {
     @Autowired
-    UsersRepository usersRepository;
+    IUsersRepository usersRepository;
     @Autowired
     GlobalMethods globalMethods;
-    @Autowired
-    ObjectMapper mapper;
+
 
     @Override
     public CountFollowersDTO countFollowers(int userId) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User sellerToCheck = globalMethods.getUserById(userId);
         if (sellerToCheck == null){
             throw new NotFoundException("El usuario con el id %d no se ha encontrado".formatted(userId));
@@ -44,6 +45,8 @@ public class SellerService implements ISellerService {
 
     @Override
     public SellerFollowersDTO listFollowers(int userId, String order) {
+        if (usersRepository.findAllUsers().isEmpty()) throw new NotFoundException("No hay usuarios registrados");
+
         User sellerToCheck = globalMethods.getUserById(userId);
         if (sellerToCheck == null){
             throw new NotFoundException("El usuario con el id %d no se ha encontrado".formatted(userId));

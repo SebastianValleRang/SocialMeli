@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.fasterxml.jackson.core.JsonParser;
@@ -23,16 +25,36 @@ import java.time.format.DateTimeParseException;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PromoPostRequestDTO {
-    @JsonProperty("user_id")
-    private int userId;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonProperty("user_id")
+    @NotNull(message = "El id no puede estar vacio.")
+    @Min(value = 1, message = "El id debe ser mayor a cero")
+    private Integer userId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy")
+    @NotNull(message = "El campo no puede estar vacío.")
+    @PastOrPresent(message = "No se puede colocar una fecha futura.")
     private LocalDate date;
 
+    @Valid
+    @NotNull(message = "El campo no puede estar vacío.")
     private ProductDTO product;
-    private int category;
-    private double price;
+
+    @NotNull(message = "El campo no puede estar vacio.")
+    private Integer category;
+
+    @NotNull(message = "El campo no puede estar vacío.")
+    @Min(value = 1, message = "El precio minimo por producto es de 1")
+    @Max(value = 10000000, message = "El precio máximo por producto es de 10.000.000")
+    private Double price;
+
+
     @JsonProperty("has_promo")
-    private boolean hasPromo;
-    private double discount;
+    @NotNull(message = "El campo no puede estar vacío.")
+    private Boolean hasPromo;
+
+    @NotNull(message = "El campo no puede estar vacío.")
+    @Min(value = 0, message = "El descuento debe ser un valor entre 0 y 1")
+    @Max(value = 1, message = "El descuento debe ser un valor entre 0 y 1")
+    private Double discount;
 }
