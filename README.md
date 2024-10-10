@@ -56,7 +56,7 @@ A continuación, se presenta un diagrama que ilustra la estructura del proyecto,
 
 Para probar ejecutar y hacer uso del proyecto se cuenta con una collección de Postman con los request necesarios para verificar cada user story.
 Este archivo se encuentra en:
-```src/main/resources/Sprint I.postman_collection.json ```
+```src/main/resources/Sprint II.postman_collection.json ```
 
 
 
@@ -171,6 +171,131 @@ Este archivo se encuentra en:
     3. Se valida si no existen vendedores inactivos
 
 ---
+
+## Tests 
+
+Para cumplir los estándares de calidad de Mercado Libre implementamos diferentes validación según lo requerido, así como test unitarios y de integración. Esto con el objetivo de alcanzar una cobertura de código testeado mayor al 80%.
+
+<p align="center"><img src="src/main/resources/CoverageAlcanzado.png" width="100%"></p>
+
+### Test unitarios requeridos:
+- **T 0001:** Verificar que el usuario a seguir exista
+  - **User story:** US0001
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0002:** Verificar que el usuario a dejar de seguir exista.
+  - **User story:** US0007
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0003:** Verificar que el tipo de ordenamiento alfabético exista
+  - **User story:** US0008
+  - **Responsable:** Sebastian Vallejo
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0004:** Verificar el correcto ordenamiento ascendente
+  y descendente por nombre
+  - **User story:** US0008
+  - **Responsable:** Ana Garcia
+  - **Comportamiento esperado:** Devuelve la lista ordenada según el criterio solicitado
+  
+- **T 0005:** Verificar que el tipo de ordenamiento por fecha exista
+  - **User story:** US0009
+  - **Responsable:** Angela Daza
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0006:** Verificar el correcto ordenamiento ascendente y descendente por fecha.
+  - **User story:** US0009
+  - **Responsable:** Angela Daza
+  - **Comportamiento esperado:** Verificar el correcto ordenamiento ascendente y descendente por fecha.
+
+- **T 0007:** Verificar que la cantidad de seguidores de un determinado usuario sea correcta
+  - **User story:** US0002
+  - **Responsable:** Ana Garcia
+  - **Comportamiento esperado:** Devuelve el cálculo correcto del total de la cantidad de seguidores que posee un usuario.
+  
+- **T 0008:** Verificar que la consulta de publicaciones realizadas en las últimas dos semanas de un determinado vendedor sean efectivamente de las últimas dos semanas.
+  - **User story:** US0006
+  - **Responsable:** Vanessa Lozano
+  - **Comportamiento esperado:** Devuelve únicamente los datos de las publicaciones que tengan fecha de publicación dentro de las últimas dos semanas a partir del día de la fecha
+
+### Test unitarios extras:
+- **T 0001 EXTRA:** Verificar que el usuario que desea seguir exista
+  - **User story:** US0001
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0001 EXTRA2:** Verificar que el usuario a seguir sea un vendedor (tenga al menos un post)
+  - **User story:** US0001
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la bad request mediante una excepción.
+
+- **T 0002 EXTRA:** Verificar que el usuario que desea dejar de seguir exista.
+  - **User story:** US0007
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la no existencia mediante una excepción.
+
+- **T 0002 EXTRA:** Verificar que el usuario que desea dejar de seguir actualmente siga al vendedor.
+  - **User story:** US0007
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple: Permite continuar con normalidad. No se cumple: Notifica la bad request mediante una excepción.
+
+- **T 0010:** Verifica que existen vendedores para devolver la lista de vendedores más activos
+  - **User story:** US0007
+  - **Responsable:** Sebastian Vallejo
+  - **Comportamiento esperado:** Se cumple: Devuelve la lista de vendedores más activos. No se cumple: Notifica la no existencia mediante una excepción.
+
+
+### Bonus: Test de integración
+
+- **TI 0001:** Verificar el endpoint /users/{userId}/follow/{userIdToFollow}. Ambos usuarios deben ser válidos.
+  - **User story:** US0001
+  - **Responsable:** Leandro Diaz
+  - **Comportamiento esperado:** Se cumple:Devuelve un ResponseDTO con el mensaje y el HttpStatus 200. No se cumple: Notifica la no existencia mediante un ExceptionDTO con status not found
+
+- **TI 0003:** Verificar que en los endpoints /users/{UserID}/followers/list?order=...  /users/{UserID}/followed/list?order=... el tipo de ordenamiento alfabético exista
+  - **User story:** US0008
+  - **Responsable:** Sebastian Vallejo
+  - **Comportamiento esperado:** Se cumple:Devuelve un ResponseDTO con el mensaje y el HttpStatus 200. No se cumple: Notifica la no existencia mediante un ExceptionDTO con status bad request
+
+- **TI 0005:** Verificar que en el endpoint /products/followed/{userId}/list?order=... el tipo de ordenamiento por fecha exista
+  - **User story:** US0009
+  - **Responsable:** Angela Daza
+  - **Comportamiento esperado:** Se cumple:Devuelve un ResponseDTO con el mensaje y el HttpStatus 200. No se cumple: Notifica la no existencia mediante un ExceptionDTO con status bad request
+  
+- **TI 0006:** Verificar que en el endpoint /products/followed/{userId}/list?order=...  la lista tiene el correcto ordenamiento ascendente y descendente por fecha.
+  - **User story:** US0009
+  - **Responsable:** Angela Daza
+  - **Comportamiento esperado:** Devuelve la lista ordenada según el criterio solicitado
+  
+- **TI 0007:** Verificar que el endpoint /users/{userId}/followers/count devuelva correctamente el número de seguidores
+  - **User story:** US0002
+  - **Responsable:** Ana Garcia
+  - **Comportamiento esperado:** Devuelve el cálculo correcto del total de la cantidad de seguidores que posee un usuario.
+
+- **TI 0008:** Verificar que en el endpoint  /products/followed/{userId}/list la consulta de publicaciones realizadas en las últimas dos semanas de un determinado vendedor sean efectivamente de las últimas dos semanas.
+  - **User story:** US0006
+  - **Responsable:** Vanessa Lozano
+  - **Comportamiento esperado:** Devuelve únicamente los datos de las publicaciones que tengan fecha de publicación dentro de las últimas dos semanas a partir del día de la fecha.
+
+- **TI 0009:** Verificar que el endpoint /products/promo-post/count devuelva correctamente el número de post en promoción
+  - **User story:** US0011
+  - **Responsable:** Vanessa Lozano
+  - **Comportamiento esperado:** Devuelve el cálculo correcto del total de la cantidad de post en promoción que posee un vendedor
+
+- **TI 0010:** Verificar que el endpoint /list/most_active_sellers devuelva correctamente la lista de vendedores con más posts
+  - **User story:** US0012
+  - **Responsable:** Ana Garcia
+  - **Comportamiento esperado:** Devuelve la lista de  los vendedores con más posts
+
+- **TI 0011:** Verificar que el endpoint /users/list/inactive_sellers devuelva correctamente la lista de vendedores inactivos
+  - **User story:** US0013
+  - **Responsable:** Sebastian Vallejo
+  - **Comportamiento esperado:** Devuelve la lista de los vendedores inactivos (no han hecho publicaciones en los últimos 6 meses)
+
+---
+
 
 ## Futuras implementaciones: 
 
