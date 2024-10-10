@@ -1,4 +1,4 @@
-package co.mercadolibre.SocialMeli.Integration.controller;
+package co.mercadolibre.SocialMeli.integration.controller;
 
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
