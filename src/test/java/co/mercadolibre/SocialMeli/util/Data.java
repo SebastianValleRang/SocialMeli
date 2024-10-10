@@ -1,6 +1,8 @@
 package co.mercadolibre.SocialMeli.util;
 
+import co.mercadolibre.SocialMeli.dto.ProductDTO;
 import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
+import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 
 import co.mercadolibre.SocialMeli.dto.response.UserDTO;
@@ -95,8 +97,8 @@ public class Data {
 
         //posts
         Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1,1,223.3);
-        Post post2 = new Post(2, 2, LocalDate.parse("2024-09-23"), product2, 2, 150.5);
-        Post post3 = new Post(3, 2, LocalDate.parse("2023-01-01"), product3, 2, 525.0);
+        Post post2 = new Post(2, 2, LocalDate.parse("2024-10-07"), product2, 2, 150.5);
+        Post post3 = new Post(3, 2, LocalDate.parse("2024-10-01"), product3, 2, 525.0);
 
         //Vendedores
         userLeandroRamirez.getPosts().add(post1);
@@ -185,6 +187,12 @@ public class Data {
         posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
     }
+    public static User createSellerWithDate(int id, String userName, LocalDate date){
+        List<Post> posts = new ArrayList<>();
+        Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
+        posts.add(new Post(1,id, date, product, 100, 150.000));
+        return new User(id, userName, new ArrayList<>(), new ArrayList<>(), posts);
+    }
     public static User createFollowedSeller(int id, String userName, User follower){
         List<User> followers = new ArrayList<>();
         followers.add(follower);
@@ -192,5 +200,23 @@ public class Data {
         Product product = new Product(2,"Licuadora","Cocina","Imusa","Negro","Gomela");
         posts.add(new Post(1,id, LocalDate.now(), product, 100, 150.000));
         return new User(id, userName, followers, new ArrayList<>(), posts);
+    }
+    public static PostResponseDTO convertPostToPostResponseDTO(Post post){
+        Product product = post.getProduct();
+        return new PostResponseDTO(
+                post.getUserId(),
+                post.getPostId(),
+                post.getDate(),
+                new ProductDTO(
+                        product.getProductId(),
+                        product.getProductName(),
+                        product.getType(),
+                        product.getBrand(),
+                        product.getColor(),
+                        product.getNotes()
+                ),
+                post.getCategory(),
+                post.getPrice()
+        );
     }
 }
