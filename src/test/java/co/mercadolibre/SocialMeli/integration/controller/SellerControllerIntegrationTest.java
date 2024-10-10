@@ -1,11 +1,8 @@
 package co.mercadolibre.SocialMeli.integration.controller;
 
-import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
 import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.CountPostDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
-import co.mercadolibre.SocialMeli.entity.User;
-import co.mercadolibre.SocialMeli.util.Data;
 import co.mercadolibre.SocialMeli.util.IntegrationData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -23,11 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,6 +60,7 @@ public class SellerControllerIntegrationTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
                         .value("El usuario con el id %d no se ha encontrado".formatted(userId)));
+
     }
 
     @Test

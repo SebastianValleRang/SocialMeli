@@ -1,20 +1,15 @@
 package co.mercadolibre.SocialMeli.repository.impl;
 
-import ch.qos.logback.core.net.DefaultSocketConnector;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.repository.IProductRepository;
 import co.mercadolibre.SocialMeli.repository.IUsersRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.aot.hint.TypeReference.listOf;
 
 @Repository
 public class UsersRepository implements IUsersRepository {
@@ -83,7 +78,7 @@ public class UsersRepository implements IUsersRepository {
 
     @Override
     public void createPost(Post post, User user) {
-        user.getPosts().add(post);
+            user.getPosts().add(post);
     }
 
 }

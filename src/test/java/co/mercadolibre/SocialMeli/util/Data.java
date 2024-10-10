@@ -1,12 +1,17 @@
 package co.mercadolibre.SocialMeli.util;
 
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
+import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
+import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
+import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
+import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.*;
 
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +21,39 @@ import java.util.List;
 public class Data {
     static ObjectMapper objectMapper = new ObjectMapper();
 
+    public static User getSellerWithPromoPost(){
+        Product product1 = new Product(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+        Post post1 = new Post(1, 2, LocalDate.parse("2024-10-03"), product1, 1, 223.3, true, 0.25);
+        User seller = new User(1, "JuanPerez");
+        seller.getPosts().add(post1);
+
+        return seller;
+    }
+
     public static List<User> getUsersListTestT0003() {
+
+        List<User> usersList;
+
+        User userJuanPerez = new User(1, "JuanPerez");
+        User userLeandroDiaz = new User(2, "LeandroDiaz");
+        User userAngelaGonzales = new User(3, "AngelaGonzales");
+        User userAnita99 = new User(4, "Anita99");
+        User userFedericoV = new User(5, "FedericoV");
+
+        usersList = List.of(userJuanPerez, userLeandroDiaz, userAngelaGonzales,
+                userAnita99, userFedericoV);
+
+        userJuanPerez.getFollowers().add(userLeandroDiaz);
+        userJuanPerez.getFollowers().add(userAngelaGonzales);
+
+        userJuanPerez.getFollowed().add(userFedericoV);
+        userJuanPerez.getFollowed().add(userAnita99);
+
+        return usersList;
+
+    }
+
+    public static List<User> getUsersListTestBonus() {
 
         List<User> usersList;
 
@@ -217,4 +254,22 @@ public class Data {
                 post.getPrice()
         );
     }
+    public static PromoPostRequestDTO createPromoPost(){
+       return new PromoPostRequestDTO(
+                1, LocalDate.parse("2024-08-08"),
+                new ProductDTO(3,"Silla Gamer", "Muebles", "Sillas jairo","Blanco", "Con lucesitas"),
+                100, 1500.50,true,0.25
+        );
+    }
+
+    public static Post createPost(){
+        objectMapper.registerModule(new JavaTimeModule());
+        PromoPostRequestDTO promoPostRequestDTO = new PromoPostRequestDTO(
+                1, LocalDate.parse("2024-08-08"),
+                new ProductDTO(3,"Silla Gamer", "Muebles", "Sillas jairo","Blanco", "Con lucesitas"),
+                100, 1500.50,true,0.25
+        );
+        return objectMapper.convertValue(promoPostRequestDTO,Post.class);
+    }
+
 }
