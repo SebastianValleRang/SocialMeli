@@ -55,19 +55,24 @@ public class PromoControllerIntegrationTest {
         @DisplayName("TI0009: No es un vendedor")
         @Test
         void countPromoPostBadRequest() throws Exception{
-            int userId = 4;
-
-            ObjectWriter writer = new ObjectMapper()
-                    .registerModule(new JavaTimeModule())
-                    .configure(SerializationFeature.WRAP_ROOT_VALUE, false)
-                    .writer();
-
-            mockMvc.perform(MockMvcRequestBuilders.get("/products/promo-post/count", userId)
+            mockMvc.perform(MockMvcRequestBuilders.get("/products/promo-post/count")
                             .contentType(MediaType.APPLICATION_JSON)
                             .param("userId", "4"))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("El usuario 4 no es un vendedor"))
                     .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+
+        }
+
+        @DisplayName("TI0009: Id no encontrado")
+        @Test
+        void countPromoPostNotFound() throws Exception{
+            mockMvc.perform(MockMvcRequestBuilders.get("/products/promo-post/count")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("userId", "55"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.message").value("Usuario no encontrado"))
+                    .andExpect(jsonPath("$.status").value("NOT_FOUND"));
 
         }
     }
