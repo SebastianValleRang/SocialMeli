@@ -31,11 +31,36 @@ public class PostControllerIntegrationTest {
     MockMvc mockMvc;
 
     @Nested
-    class showLastTwoWeeksPost{
+    class showLastTwoWeeksPost {
 
         @DisplayName("TI0008: Muestra unicamente los post de las últimas 2 semanas")
         @Test
-        void getPostByUserLastTwoWeeksTest() throws Exception{
+        void getPostByUserLastTwoWeeksTest() throws Exception {
+            ProductDTO product = new ProductDTO(1, "Mesedora", "Muebles", "Sillas jairo", "Blanco", "Realizada con madera de roble");
+            RecentPostDTO responseDTO = new RecentPostDTO(2, List.of(new PostResponseDTO(1, 1, LocalDate.parse("2024-10-03"), product, 1, 223.3)));
+
+            ObjectWriter writer = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .configure(SerializationFeature.WRAP_ROOT_VALUE, false)
+                    .writer();
+
+            String responseJson = writer.writeValueAsString(responseDTO);
+
+            MvcResult result = mockMvc.perform(get("/products/followed/2/list")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            Assertions.assertEquals(responseJson, result.getResponse().getContentAsString());
+        }
+
+    }
+    @Nested
+    class withFilterOrder{
+
+        @DisplayName("TI0006: Muestra unicamente los post de las últimas 2 semanas ordenados según el parámetro de la url")
+        @Test
+        void postWithOrder() throws Exception{
             ProductDTO product = new ProductDTO(1,"Mesedora","Muebles","Sillas jairo","Blanco", "Realizada con madera de roble");
             RecentPostDTO responseDTO = new RecentPostDTO(2, List.of(new PostResponseDTO(1, 1, LocalDate.parse("2024-10-03"),product,1,223.3)));
 
@@ -46,13 +71,12 @@ public class PostControllerIntegrationTest {
 
             String responseJson = writer.writeValueAsString(responseDTO);
 
-            MvcResult result = mockMvc.perform(get("/products/followed/2/list")
+            MvcResult result = mockMvc.perform(get("/products/followed/2/list?order=date_desc")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
             Assertions.assertEquals(responseJson, result.getResponse().getContentAsString());
         }
-
     }
 }
