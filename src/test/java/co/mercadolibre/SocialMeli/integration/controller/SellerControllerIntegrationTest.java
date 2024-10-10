@@ -151,5 +151,20 @@ public class SellerControllerIntegrationTest {
 //                            .value("No hay usuarios registrados."));
 //
 //        }
+
+        @Test
+        @DisplayName("T0011 - Lista de vendedores inactivos - Camino Bueno")
+        public void listInactiveSellersGoodTest() throws Exception {
+            String jsonString = "[{\"user_id\":400,\"user_name\":\"PepitoPerez\",\"last_post\":\"03-10-2021\"}]";
+
+            MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get("/users/list/inactive_sellers"))
+                    .andDo(print()).andExpect(status().isOk())
+                    .andExpect(content().contentType("application/json"))
+                    .andReturn();
+
+            Assertions.assertEquals(jsonString, response.getResponse().getContentAsString());
+
+        }
+
     }
 }
