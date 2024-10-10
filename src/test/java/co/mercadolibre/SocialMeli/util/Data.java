@@ -1,12 +1,17 @@
 package co.mercadolibre.SocialMeli.util;
 
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
+import co.mercadolibre.SocialMeli.dto.request.PromoPostRequestDTO;
+import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
+import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
+import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.*;
 
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -249,4 +254,22 @@ public class Data {
                 post.getPrice()
         );
     }
+    public static PromoPostRequestDTO createPromoPost(){
+       return new PromoPostRequestDTO(
+                1, LocalDate.parse("2024-08-08"),
+                new ProductDTO(3,"Silla Gamer", "Muebles", "Sillas jairo","Blanco", "Con lucesitas"),
+                100, 1500.50,true,0.25
+        );
+    }
+
+    public static Post createPost(){
+        objectMapper.registerModule(new JavaTimeModule());
+        PromoPostRequestDTO promoPostRequestDTO = new PromoPostRequestDTO(
+                1, LocalDate.parse("2024-08-08"),
+                new ProductDTO(3,"Silla Gamer", "Muebles", "Sillas jairo","Blanco", "Con lucesitas"),
+                100, 1500.50,true,0.25
+        );
+        return objectMapper.convertValue(promoPostRequestDTO,Post.class);
+    }
+
 }
