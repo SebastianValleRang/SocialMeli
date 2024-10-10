@@ -40,7 +40,7 @@ public class UserServiceTest {
     class userOrderListT0004{
         @DisplayName("T-0004: Listar seguidos por orden ascendente")
         @Test
-        public void listFollowedSellersTestOrderAsc(){
+        void listFollowedSellersTestOrderAsc(){
             //Arrange
             int userId = 4;
             String order = "name_asc";
@@ -76,7 +76,7 @@ public class UserServiceTest {
         }
         @DisplayName("T-0004: Orden inválido")
         @Test
-        public void listFollowersTestOrderInvalid(){
+         void listFollowersTestOrderInvalid(){
             //Arrange
             int userId = 1;
             String order = "name";

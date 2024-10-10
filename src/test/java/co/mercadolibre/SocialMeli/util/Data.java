@@ -1,11 +1,8 @@
 package co.mercadolibre.SocialMeli.util;
 
 import co.mercadolibre.SocialMeli.dto.ProductDTO;
-import co.mercadolibre.SocialMeli.dto.response.ClientFollowedDTO;
-import co.mercadolibre.SocialMeli.dto.response.PostResponseDTO;
-import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
+import co.mercadolibre.SocialMeli.dto.response.*;
 
-import co.mercadolibre.SocialMeli.dto.response.UserDTO;
 import co.mercadolibre.SocialMeli.entity.User;
 import co.mercadolibre.SocialMeli.entity.Post;
 import co.mercadolibre.SocialMeli.entity.Product;
@@ -120,14 +117,6 @@ public class Data {
         return List.of(userLeandroRamirez,userVaneLozano,userAngelaDaza,userAnaGarcia,userSebasVallejo);
     }
 
-    public static SellerFollowersDTO getlistFollowersTest(){
-        List<User> users = getUsersListTest();
-        List<UserDTO> sellerFollowers = users.getFirst().getFollowers().stream()
-                .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
-                .toList();
-        return new SellerFollowersDTO(users.getFirst().getUserId(), users.getFirst().getUserName(), sellerFollowers);
-    }
-
     public static SellerFollowersDTO getlistFollowersAscTest(){
         List<UserDTO> sellerFollowers = List.of(new UserDTO(4,"AnaGarcia"),new UserDTO(5, "SebasVallejo"),new UserDTO(2,"VaneLozano"));
         return new SellerFollowersDTO(1, "LeandroRamirez", sellerFollowers);
@@ -154,6 +143,10 @@ public class Data {
                 .map(v -> new UserDTO(v.getUserId(), v.getUserName()))
                 .toList();
         return new ClientFollowedDTO(users.get(3).getUserId(), users.get(3).getUserName(), userFollowed.stream().sorted(Comparator.comparing(UserDTO::getUserName).reversed()).toList());
+    }
+
+    public static CountFollowersDTO getCountFollowers(){
+        return new CountFollowersDTO(1,"LeandroRamirez",3);
     }
 
     public static User getUserThatFollows1Seller(){

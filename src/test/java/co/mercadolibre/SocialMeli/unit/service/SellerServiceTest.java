@@ -1,5 +1,6 @@
 package co.mercadolibre.SocialMeli.unit.service;
 
+import co.mercadolibre.SocialMeli.dto.response.CountFollowersDTO;
 import co.mercadolibre.SocialMeli.dto.response.ExceptionDTO;
 import co.mercadolibre.SocialMeli.dto.response.SellerFollowersDTO;
 import co.mercadolibre.SocialMeli.entity.User;
@@ -42,7 +43,7 @@ public class SellerServiceTest {
     class userOrderListT0004{
         @DisplayName("T-0004: Listar seguidores por orden ascendente")
         @Test
-        public void listFollowersTestOrderAsc(){
+        void listFollowersTestOrderAsc(){
             //Arrange
             int userId = 1;
             String order = "name_asc";
@@ -61,7 +62,7 @@ public class SellerServiceTest {
         }
         @DisplayName("T-0004: Listar seguidores por orden descendente")
         @Test
-        public void listFollowersTestOrderDesc(){
+        void listFollowersTestOrderDesc(){
             //Arrange
             int userId = 1;
             String order = "name_desc";
@@ -80,7 +81,7 @@ public class SellerServiceTest {
         }
         @DisplayName("T-0004: Orden invalido")
         @Test
-        public void listFollowersTestOrderInvalid(){
+        void listFollowersTestOrderInvalid(){
             //Arrange
             int userId = 1;
             String order = "name";
@@ -99,7 +100,85 @@ public class SellerServiceTest {
         }
 
     }
+    @Nested
+    class T0007 {
+        @DisplayName("T-0007: Contar seguidores")
+        @Test
+        void countFollowersOkTest(){
+            //Arrange
+            int userId = 1;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null); //traer el vendedor numero 1
+            CountFollowersDTO expectedCount = Data.getCountFollowers(); //traer el número de seguidores
 
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+            CountFollowersDTO countFollowers = sellerService.countFollowers(userId);
+
+            //Assert
+            assertEquals(expectedCount,countFollowers);
+            verify(usersRepository).findAllUsers();
+
+        }
+        @DisplayName("T-0007: No se encuentra el usuario")
+        @Test
+        void countFollowersNotUserFoundTest(){
+            //Arrange
+            int userId = 8;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = null; //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("El usuario con el id 8 no se ha encontrado", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, ()->sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods, never()).isNotSeller(any(User.class));
+        }
+        @DisplayName("T-0007: El usuario no es vendedor")
+        @Test
+        void countFollowersNotSellerTest(){
+            //Arrange
+            int userId = 5;
+            List<User> usersList = Data.getUsersListTest(); //traer datos precargados
+            User userSeller = usersList.stream().filter(u->u.getUserId() == userId).findFirst().orElse(null); //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("El usuario con el id 5 no es un vendedor", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+            when(globalMethods.isNotSeller(userSeller)).thenReturn(true);
+            when(globalMethods.getUserById(userId)).thenReturn(userSeller);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, ()->sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods).isNotSeller(any(User.class));
+        }
+        @DisplayName("T-0007: No hay usuarios registrados")
+        @Test
+        void countFollowersNotUsersTest(){
+            //Arrange
+            int userId = 1;
+            List<User> usersList = new ArrayList<>(); //traer datos precargados
+            User userSeller = null; //traer vendedor nulo
+            ExceptionDTO expectedResponse = new ExceptionDTO("No hay usuarios registrados", HttpStatus.NOT_FOUND);
+
+            //Act
+            when(usersRepository.findAllUsers()).thenReturn(usersList);
+
+            //Assert
+            NotFoundException notFoundException = assertThrows(NotFoundException.class, ()->sellerService.countFollowers(userId));
+            assertTrue(notFoundException.getMessage().contains(expectedResponse.getMessage()));
+            verify(usersRepository).findAllUsers();
+            verify(globalMethods, never()).isNotSeller(any(User.class));
+        }
+    }
     @Nested
     class T0003{
         @DisplayName("Ordenar seguidores - Camino Bueno")
